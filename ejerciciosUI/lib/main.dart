@@ -32,46 +32,58 @@ class Ejercicio2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildInfoHeader(context),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              Colors.indigo.shade300,
+              Colors.indigo.shade500,
+            ])),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  buildInfoHeader(context),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Collection",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      FlatButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Create new",
+                            style: TextStyle(color: Colors.blue),
+                          ))
+                    ],
+                  ),
+                  buildComidas(),
+                  SizedBox(height: 20),
                   Text(
-                    "Collection",
+                    "Most liked posts",
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  FlatButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Create new",
-                        style: TextStyle(color: Colors.blue),
-                      ))
+                  SizedBox(height: 10),
+                  Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                          "https://i2.wp.com/aspgems.com/wp-content/uploads/2020/01/flutter-dart.png"),
+                    ),
+                  )
                 ],
               ),
-              buildComidas(),
-              SizedBox(height: 20),
-              Text(
-                "Most liked posts",
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              SizedBox(height: 10),
-              Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.network(
-                      "https://i2.wp.com/aspgems.com/wp-content/uploads/2020/01/flutter-dart.png"),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -111,7 +123,7 @@ class Ejercicio2 extends StatelessWidget {
 
   Container buildInfoHeader(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 100),
+      margin: EdgeInsets.only(top: 50),
       child: Stack(
         children: [
           Container(
