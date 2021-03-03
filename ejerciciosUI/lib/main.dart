@@ -10,87 +10,98 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Ejercicio1(),
+      home: Ejercicio2(),
     );
   }
 }
 
-class Ejercicio1 extends StatelessWidget {
+class Ejercicio2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
+      body: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(
-                    "https://static.businessworld.in/article/article_extra_large_image/1520586649_m0xkGj_jack-daniels-2018-scout-bobber.jpg",
+            margin: EdgeInsets.only(top: 40, left: 40, right: 40),
+            child: Stack(
+              children: [
+                Material(
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        "Mebina Nepal",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("UI/UX designer"),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "302",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "POSTS",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "10.3K",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "FOLLOWERS",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                "120",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "FOLLOWING",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
-                  fit: BoxFit.cover),
+                ),
+                CircleAvatar(
+                  radius: 40,
+                  backgroundImage: NetworkImage(
+                      "https://alternosradio.com/wp-content/uploads/2020/10/120366236_2728489860727307_2567081284175918216_n.jpg"),
+                ),
+              ],
             ),
-          ),
-          Container(
-            color: Colors.black.withOpacity(0.7),
-          ),
-          SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 100),
-                  Text(
-                    "Welcome Back",
-                    style: TextStyle(color: Colors.white, fontSize: 28),
-                  ),
-                  Text("Sign in to continue",
-                      style: TextStyle(color: Colors.white)),
-                  SizedBox(height: 30),
-                  TextField(
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                        hintText: "Username",
-                        hintStyle: TextStyle(color: Colors.white60),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white54))),
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    obscureText: true,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                        hintText: "Password",
-                        hintStyle: TextStyle(color: Colors.white60),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white54))),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Forgot yout password?",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    child: RaisedButton(
-                      onPressed: () {},
-                      child: Text("Sign  in "),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      "Dont have an account? SIGN UP",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          )
         ],
       ),
     );
