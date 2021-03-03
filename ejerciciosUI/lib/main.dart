@@ -32,18 +32,18 @@ class Ejercicio2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Colors.indigo.shade300,
-              Colors.indigo.shade500,
-            ])),
-          ),
-          SingleChildScrollView(
-            child: Padding(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.indigo.shade300,
+                Colors.indigo.shade500,
+              ])),
+            ),
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,8 +82,8 @@ class Ejercicio2 extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
