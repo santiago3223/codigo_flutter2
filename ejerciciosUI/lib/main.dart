@@ -66,78 +66,76 @@ class Ejercicio4 extends StatelessWidget {
           children: [
             Container(
               color: Colors.grey.shade300,
-              child: Column(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    margin: EdgeInsets.all(16),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.pink.shade100,
-                        ),
-                        Container(
-                            margin: EdgeInsets.all(16),
-                            color: Colors.white,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Image.network(
-                                    "https://upload.wikimedia.org/wikipedia/commons/3/35/Elvis_Presley_Jailhouse_Rock.jpg",
-                                    width: 75,
-                                    height: 100,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "How to seem like you always have your shot together, How to seem like you always have your shot together , How to seem like you always have your shot together",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
-                                        ),
-                                        Row(
+              child: ListView.builder(
+                  itemBuilder: (c, i) => Container(
+                        color: Colors.white,
+                        margin: EdgeInsets.all(16),
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 100,
+                              color: Colors.pink.shade100,
+                            ),
+                            Container(
+                                margin: EdgeInsets.all(16),
+                                color: Colors.white,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Image.network(
+                                        "https://upload.wikimedia.org/wikipedia/commons/3/35/Elvis_Presley_Jailhouse_Rock.jpg",
+                                        width: 75,
+                                        height: 100,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Icon(
-                                              Icons.circle,
-                                              color: Colors.pink,
-                                              size: 36,
-                                            ),
                                             Text(
-                                              "Jonhy Vino",
-                                              style: TextStyle(fontSize: 16),
+                                              "How to seem like you always have your shot together.",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.circle,
+                                                  color: Colors.pink,
+                                                  size: 36,
+                                                ),
+                                                Text(
+                                                  "Jonhy Vino",
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Text(
+                                                  "4 min",
+                                                ),
+                                              ],
                                             ),
                                             SizedBox(
-                                              width: 20,
+                                              height: 8,
                                             ),
-                                            Text(
-                                              "4 min",
-                                            ),
+                                            Text("read")
                                           ],
                                         ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text("read")
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ],
+                        ),
+                      )),
             ),
             Container(
               child: Center(
