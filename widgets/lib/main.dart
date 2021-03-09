@@ -9,78 +9,135 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LayoutsWidgets2(),
+      home: Formularios(),
     );
   }
 }
 
-class LayoutsWidgets2 extends StatefulWidget {
+class Formularios extends StatefulWidget {
   @override
-  _LayoutsWidgets2State createState() => _LayoutsWidgets2State();
+  _FormulariosState createState() => _FormulariosState();
 }
 
-class _LayoutsWidgets2State extends State<LayoutsWidgets2> {
+class _FormulariosState extends State<Formularios> {
+  TextEditingController _controller = TextEditingController();
+
+  List alumnos = ["Willy", "Jesus", "Daphne"];
+  String seleccion = "Willy";
+  String seleccionDropDown = "Willy";
+  List alumnosSeleccionados = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        color: Colors.red,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text("Hola"),
-            Row(
-              children: [
-                RaisedButton(
-                  onPressed: () {},
-                  child: Text("boton"),
-                ),
-                Expanded(
-                  child: Text(
-                      "Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola Hola"),
-                ),
-              ],
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    width: 200,
-                    height: 200,
-                    color: Colors.green,
+      body: Column(
+        children: [
+          TextField(
+            maxLength: 5,
+            keyboardType: TextInputType.emailAddress,
+            controller: _controller,
+            onChanged: (s) {
+              print(s);
+            },
+            onEditingComplete: () {
+              print("Termino");
+            },
+            onSubmitted: (s) {
+              print("Submited");
+            },
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.monetization_on),
+                prefixText: "Pagar:",
+                suffixText: ".00",
+                hintText: "Monto",
+                enabledBorder: UnderlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)))),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextField(
+            maxLines: 5,
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (s) {
+              print(s);
+            },
+            onEditingComplete: () {
+              print("Termino");
+            },
+            onSubmitted: (s) {
+              print("Submited");
+            },
+            decoration: InputDecoration(
+                labelText: "Nombre",
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.all(Radius.circular(5)))),
+          ),
+          Column(
+            children: alumnos
+                .map(
+                  (e) => Row(
+                    children: [
+                      Radio(
+                        value: e,
+                        groupValue: seleccion,
+                        onChanged: (i) {
+                          setState(() {
+                            seleccion = i;
+                          });
+                        },
+                      ),
+                      Text(e)
+                    ],
                   ),
-                  Container(
-                    margin: EdgeInsets.all(5),
-                    width: 200,
-                    height: 200,
-                    color: Colors.green,
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) => ListTile(
-                  title: Text("$index"),
-                ),
-              ),
-            ),
-            Expanded(
-                child: GridView.builder(
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-              itemBuilder: (context, index) => Container(
-                  margin: EdgeInsets.all(8),
-                  color: Colors.blue,
-                  child: Text("$index")),
-            ))
-          ],
-        ),
+                )
+                .toList(),
+          ),
+          DropdownButton(
+            value: seleccionDropDown,
+            onChanged: (i) {
+              setState(() {
+                seleccionDropDown = i;
+              });
+            },
+            items: alumnos
+                .map((e) => (DropdownMenuItem(value: e, child: Text(e))))
+                .toList(),
+          ),
+          Column(
+            children: alumnos
+                .map(
+                  (e) => Row(
+                    children: [
+                      Checkbox(
+                        value: alumnosSeleccionados.contains(e),
+                        onChanged: (i) {
+                          setState(() {
+                            if (i) {
+                              alumnosSeleccionados.add(e);
+                            } else {
+                              alumnosSeleccionados.remove(e);
+                            }
+                          });
+                        },
+                      ),
+                      Text(e)
+                    ],
+                  ),
+                )
+                .toList(),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              print(_controller.text);
+            },
+            child: Text("Boton"),
+          )
+        ],
       ),
     );
   }
