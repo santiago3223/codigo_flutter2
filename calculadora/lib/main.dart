@@ -24,6 +24,12 @@ class Calculadora extends StatefulWidget {
 }
 
 class _CalculadoraState extends State<Calculadora> {
+  List opcionesLinea1 = ["c", "<-", "%", "/"];
+  List opcionesLinea2 = ["7", "8", "9", "x"];
+  List opcionesLinea3 = ["4", "5", "6", "-"];
+  List opcionesLinea4 = ["1", "2", "3", "+"];
+  List opcionesLinea5 = ["e", "0", ".", "="];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,54 +39,33 @@ class _CalculadoraState extends State<Calculadora> {
       body: Column(
         children: [
           Container(height: 150, child: TextField()),
-          obtenerPrimeraLinea(context),
-          obtenerPrimeraLinea(context),
-          obtenerPrimeraLinea(context),
-          obtenerPrimeraLinea(context),
-          
+          obtenerLinea(context, opcionesLinea1),
+          obtenerLinea(context, opcionesLinea2),
+          obtenerLinea(context, opcionesLinea3),
+          obtenerLinea(context, opcionesLinea4),
+          obtenerLinea(context, opcionesLinea5),
         ],
       ),
     );
   }
-}
 
-Widget obtenerPrimeraLinea(context) {
-  return Expanded(
-      child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: (Orientation.portrait == MediaQuery.of(context).orientation)
-              ? [
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                ]
-              : [
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                  Expanded(
-                      child:
-                          ElevatedButton(onPressed: () {}, child: Text("C"))),
-                ]));
+  Widget obtenerLinea(context, opciones) {
+    List<Widget> botones =
+        opciones.map<Widget>((e) => obtenerBoton(context, e)).toList();
+    if (Orientation.portrait != MediaQuery.of(context).orientation) {
+      botones.addAll([
+        Expanded(child: ElevatedButton(onPressed: () {}, child: Text("("))),
+        Expanded(child: ElevatedButton(onPressed: () {}, child: Text(")"))),
+      ]);
+    }
+
+    return Expanded(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch, children: botones));
+  }
+
+  Widget obtenerBoton(context, texto) {
+    return Expanded(
+        child: ElevatedButton(onPressed: () {}, child: Text(texto)));
+  }
 }
