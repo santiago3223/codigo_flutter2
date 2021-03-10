@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,7 +36,7 @@ class _CalculadoraState extends State<Calculadora> {
   void initState() {
     super.initState();
     opcionesLinea1 = opcionesLinea1 = [
-      BotonCalculadora(etiqueta: "C", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "C", funcion: borrarTodo),
       BotonCalculadora(etiqueta: "<-", funcion: borrarCaracter),
       BotonCalculadora(etiqueta: "%", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "/", funcion: agregarCaracter),
@@ -46,7 +47,7 @@ class _CalculadoraState extends State<Calculadora> {
       BotonCalculadora(etiqueta: "7", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "8", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "9", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: "-", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "*", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
     ];
@@ -70,7 +71,7 @@ class _CalculadoraState extends State<Calculadora> {
       BotonCalculadora(etiqueta: "e", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "0", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: ".", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: "=", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "=", funcion: resolver),
       BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
     ];
@@ -134,6 +135,12 @@ class _CalculadoraState extends State<Calculadora> {
             )));
   }
 
+  void borrarTodo(texto) {
+    setState(() {
+      display = "";
+    });
+  }
+
   void borrarCaracter(texto) {
     setState(() {
       display = display.substring(0, display.length - 1);
@@ -143,6 +150,16 @@ class _CalculadoraState extends State<Calculadora> {
   void agregarCaracter(texto) {
     setState(() {
       display += texto;
+    });
+  }
+
+  void resolver(texto) {
+    Parser p = Parser();
+    ContextModel cm = ContextModel();
+    Expression exp = p.parse(display);
+    double e = exp.evaluate(EvaluationType.REAL, cm);
+    setState(() {
+      display =  e.toString();
     });
   }
 }
