@@ -24,11 +24,25 @@ class Calculadora extends StatefulWidget {
 }
 
 class _CalculadoraState extends State<Calculadora> {
-  List opcionesLinea1 = ["c", "<-", "%", "/", "(", ")"];
+  List opcionesLinea1 = [];
   List opcionesLinea2 = ["7", "8", "9", "x", "(", ")"];
   List opcionesLinea3 = ["4", "5", "6", "-", "(", ")"];
   List opcionesLinea4 = ["1", "2", "3", "+", "(", ")"];
   List opcionesLinea5 = ["e", "0", ".", "=", "(", ")"];
+  String display = "";
+
+  @override
+  void initState() {
+    super.initState();
+    opcionesLinea1 = opcionesLinea1 = [
+      BotonCalculadora(etiqueta: "C", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "<-", funcion: borrarCaracter),
+      BotonCalculadora(etiqueta: "%", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "/", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +51,27 @@ class _CalculadoraState extends State<Calculadora> {
         title: Text('Calculadora'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(height: 150, child: TextField()),
+          Container(
+              padding: EdgeInsets.all(8),
+              height: 150,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    display,
+                    style: TextStyle(fontSize: 30),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              )),
           obtenerLinea(context, opcionesLinea1),
-          obtenerLinea(context, opcionesLinea2),
-          obtenerLinea(context, opcionesLinea3),
-          obtenerLinea(context, opcionesLinea4),
-          obtenerLinea(context, opcionesLinea5),
+          // obtenerLinea(context, opcionesLinea2),
+          // obtenerLinea(context, opcionesLinea3),
+          // obtenerLinea(context, opcionesLinea4),
+          // obtenerLinea(context, opcionesLinea5),
         ],
       ),
     );
@@ -62,8 +90,34 @@ class _CalculadoraState extends State<Calculadora> {
             crossAxisAlignment: CrossAxisAlignment.stretch, children: botones));
   }
 
-  Widget obtenerBoton(context, texto) {
+  Widget obtenerBoton(context, BotonCalculadora  botonCalculadora) {
     return Expanded(
-        child: ElevatedButton(onPressed: () {}, child: Text(texto)));
+        child: TextButton(
+            onPressed: () {
+              botonCalculadora.funcion(botonCalculadora.etiqueta);
+            },
+            child: Text(
+              botonCalculadora.etiqueta,
+              style: TextStyle(fontSize: 25),
+            )));
   }
+
+  void borrarCaracter(texto) {
+    setState(() {
+      display = display.substring(0, display.length - 1);
+    });
+  }
+
+  void agregarCaracter(texto) {
+    setState(() {
+      display += texto;
+    });
+  }
+}
+
+class BotonCalculadora {
+  String etiqueta;
+  Function funcion;
+
+  BotonCalculadora({this.etiqueta, this.funcion});
 }
