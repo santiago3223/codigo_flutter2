@@ -24,11 +24,11 @@ class Calculadora extends StatefulWidget {
 }
 
 class _CalculadoraState extends State<Calculadora> {
-  List opcionesLinea1 = ["c", "<-", "%", "/"];
-  List opcionesLinea2 = ["7", "8", "9", "x"];
-  List opcionesLinea3 = ["4", "5", "6", "-"];
-  List opcionesLinea4 = ["1", "2", "3", "+"];
-  List opcionesLinea5 = ["e", "0", ".", "="];
+  List opcionesLinea1 = ["c", "<-", "%", "/", "(", ")"];
+  List opcionesLinea2 = ["7", "8", "9", "x", "(", ")"];
+  List opcionesLinea3 = ["4", "5", "6", "-", "(", ")"];
+  List opcionesLinea4 = ["1", "2", "3", "+", "(", ")"];
+  List opcionesLinea5 = ["e", "0", ".", "=", "(", ")"];
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,9 @@ class _CalculadoraState extends State<Calculadora> {
   Widget obtenerLinea(context, opciones) {
     List<Widget> botones =
         opciones.map<Widget>((e) => obtenerBoton(context, e)).toList();
-    if (Orientation.portrait != MediaQuery.of(context).orientation) {
-      botones.addAll([
-        Expanded(child: ElevatedButton(onPressed: () {}, child: Text("("))),
-        Expanded(child: ElevatedButton(onPressed: () {}, child: Text(")"))),
-      ]);
+    if (Orientation.portrait == MediaQuery.of(context).orientation) {
+      botones.removeLast();
+      botones.removeLast();
     }
 
     return Expanded(
