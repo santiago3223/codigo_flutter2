@@ -30,6 +30,7 @@ class _CalculadoraState extends State<Calculadora> {
   List opcionesLinea3 = [];
   List opcionesLinea4 = [];
   List opcionesLinea5 = [];
+  List historial = [];
   String display = "";
 
   @override
@@ -48,32 +49,32 @@ class _CalculadoraState extends State<Calculadora> {
       BotonCalculadora(etiqueta: "8", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "9", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "*", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "^2", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "sqrt", funcion: raiz),
     ];
     opcionesLinea3 = opcionesLinea3 = [
       BotonCalculadora(etiqueta: "4", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "5", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "6", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "-", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "^", funcion: potencia),
+      BotonCalculadora(etiqueta: "log", funcion: lg),
     ];
     opcionesLinea4 = opcionesLinea4 = [
       BotonCalculadora(etiqueta: "1", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "2", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "3", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "+", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "sin", funcion: sin),
+      BotonCalculadora(etiqueta: "ln", funcion: ln),
     ];
     opcionesLinea5 = opcionesLinea5 = [
       BotonCalculadora(etiqueta: "e", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "0", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: ".", funcion: agregarCaracter),
       BotonCalculadora(etiqueta: "=", funcion: resolver),
-      BotonCalculadora(etiqueta: "(", funcion: agregarCaracter),
-      BotonCalculadora(etiqueta: ")", funcion: agregarCaracter),
+      BotonCalculadora(etiqueta: "cos", funcion: cos),
+      BotonCalculadora(etiqueta: "tan", funcion: tan),
     ];
   }
 
@@ -86,20 +87,26 @@ class _CalculadoraState extends State<Calculadora> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-              padding: EdgeInsets.all(8),
-              height: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    display,
-                    style: TextStyle(fontSize: 30),
-                    textAlign: TextAlign.right,
-                  ),
-                ],
-              )),
+          Orientation.portrait == MediaQuery.of(context).orientation
+              ? Container(
+                  padding: EdgeInsets.all(8),
+                  height: 150,
+                  child: ListView(
+                    children: historial
+                        .map((e) => Align(
+                            alignment: Alignment.topRight,
+                            child: Text(
+                              e,
+                              textAlign: TextAlign.left,
+                            )))
+                        .toList(),
+                  ))
+              : Container(),
+          Text(
+            display,
+            style: TextStyle(fontSize: 30),
+            textAlign: TextAlign.right,
+          ),
           obtenerLinea(context, opcionesLinea1),
           obtenerLinea(context, opcionesLinea2),
           obtenerLinea(context, opcionesLinea3),
@@ -153,14 +160,67 @@ class _CalculadoraState extends State<Calculadora> {
     });
   }
 
+  void alCuadrado(texto) {
+    setState(() {
+      display += texto;
+    });
+  }
+
+  void raiz(texto) {
+    setState(() {
+      display += texto+"(";
+    });
+  }
+
+
+  void potencia(texto) {
+    setState(() {
+      display += texto;
+    });
+  }
+
+  void lg(texto) {
+    setState(() {
+      display = "log("+display+",";
+    });
+  }
+
+  void ln(texto) {
+    setState(() {
+      display += texto+"(";
+    });
+  }
+  void sin(texto) {
+    setState(() {
+      display += texto+"(";
+    });
+  }
+  void cos(texto) {
+    setState(() {
+      display += texto+"(";
+    });
+  }
+  void tan(texto) {
+    setState(() {
+      display += texto+"(";
+    });
+  }
+
   void resolver(texto) {
     Parser p = Parser();
     ContextModel cm = ContextModel();
-    Expression exp = p.parse(display);
-    double e = exp.evaluate(EvaluationType.REAL, cm);
-    setState(() {
-      display =  e.toString();
-    });
+    try {
+      Expression exp = p.parse(display);
+      double e = exp.evaluate(EvaluationType.REAL, cm);
+      setState(() {
+        historial.add(display);
+        display = e.toString();
+      });
+    } on Error {
+      setState(() {
+        display = "Syntax Error";
+      });
+    }
   }
 }
 
