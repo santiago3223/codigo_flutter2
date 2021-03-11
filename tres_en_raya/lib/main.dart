@@ -200,30 +200,49 @@ class _TresEnRayaState extends State<TresEnRaya> {
     return false;
   }
 
+  bool tableroLleno(board) {
+    for (String t in board) {
+      if (t == "") return false;
+    }
+    return true;
+  }
+
   List minimax(board, player) {
+    int best;
+    if (player)
+      best = -10;
+    else
+      best = 10;
+
     if (verificarGanador(board)) {
-      return [1, 0];
+      return [best, null];
+    }
+    if (tableroLleno(board)) {
+      return [0, null];
     }
 
-    int move = -1;
-    int score = -2;
+    int bestMove = -1;
 
     for (var i = 0; i < board.length; i++) {
       if (board[i] == "") {
         List boardWithNewMove = []..addAll(board);
         boardWithNewMove[i] = player ? "X" : "O";
         List mm = minimax(boardWithNewMove, !player);
-        int scoreForTheMove = -mm[0];
-        if (scoreForTheMove > score) {
-          score = scoreForTheMove;
-          move = i;
+        int score = mm[0];
+        if (player) {
+          if (score > best) {
+            best = score;
+            bestMove = i;
+          }
+        } else {
+          if (score < best) {
+            best = score;
+            bestMove = i;
+          }
         }
       }
+    }
 
-    }
-    if (move == -1) {
-      return [0, -1];
-    }
-    return [score, move];
+    return [best, bestMove];
   }
 }
