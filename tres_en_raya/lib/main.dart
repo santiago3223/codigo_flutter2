@@ -208,9 +208,9 @@ class _TresEnRayaState extends State<TresEnRaya> {
     int move = -1;
     int score = -2;
 
-    for (var i = 0; i < board.length; ++i) {
+    for (var i = 0; i < board.length; i++) {
       if (board[i] == "") {
-        List boardWithNewMove = List.from(board);
+        List boardWithNewMove = []..addAll(board);
         boardWithNewMove[i] = player ? "X" : "O";
         List mm = minimax(boardWithNewMove, !player);
         int scoreForTheMove = -mm[0];
