@@ -28,10 +28,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> opciones = ['a', 'b', 'c', 'd', 'e', 'f'];
+  List<String> opciones = [
+    "https://img.icons8.com/bubbles/2x/jake.png",
+    "https://img.icons8.com/bubbles/2x/futurama-bender.png",
+    "https://img.icons8.com/bubbles/2x/super-mario.png",
+    "https://img.icons8.com/bubbles/2x/iron-man.png",
+    "https://img.icons8.com/bubbles/2x/walter-white.png",
+    "https://img.icons8.com/bubbles/2x/stormtrooper.png"
+  ];
   List<bool> giroTarjetas = [];
   List<GlobalKey<FlipCardState>> estados_tarjetas = [];
-  int puntaje = 0;
+  int movimientos = 0;
   int indicePrimeraTarjeta;
 
   void aleatorizarTarjetas() {
@@ -46,12 +53,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void tarjetaPresionada(int i) {
+
+    setState(() {
+      movimientos++;
+    });
+
     if (indicePrimeraTarjeta == null) {
       indicePrimeraTarjeta = i;
     } else {
       if (opciones[indicePrimeraTarjeta] == opciones[i]) {
-        puntaje++;
-        print(giroTarjetas);
+        
         setState(() {
           giroTarjetas[i] = false;
           giroTarjetas[indicePrimeraTarjeta] = false;
@@ -85,7 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          Text("00"),
+          Text(
+            "$movimientos",
+            style: TextStyle(fontSize: 40),
+          ),
           Expanded(
             child: GridView.builder(
               gridDelegate:
@@ -93,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: opciones.length,
               itemBuilder: (BuildContext context, int index) {
                 return FlipCard(
-                  flipOnTouch: giroTarjetas[index],
+                  flipOnTouch: giroTarjetas[index] && indicePrimeraTarjeta !=index,
                   onFlipDone: (defrente) {
                     if (!defrente) {
                       tarjetaPresionada(index);
@@ -103,10 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   back: Container(
                     child: Card(
                       color: Colors.orange.shade100,
-                      child: Text(
-                        opciones[index],
-                        style: TextStyle(fontSize: 40),
-                      ),
+                      child: Image.network(opciones[index]),
                     ),
                   ),
                   front: Container(
@@ -126,6 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void reiniciar() async {
+    setState(() {
+      movimientos = 0;
+    });
+
     estados_tarjetas.forEach((estadoTarjeta) {
       if (!estadoTarjeta.currentState.isFront)
         estadoTarjeta.currentState.toggleCard();
