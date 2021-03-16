@@ -37,6 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void tarjetaPresionada(int i ){
+    
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,8 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: opciones.length,
               itemBuilder: (BuildContext context, int index) {
                 return FlipCard(
+
                   key: estados_tarjetas[index],
-                  front: Container(
+                   back: Container(
                     child: Card(
                       color: Colors.orange.shade100,
                       child: Text(
@@ -75,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  back: Container(
+                  front: Container(
                     child: Card(
                       color: Colors.orange.shade300,
                     ),
@@ -91,11 +96,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void reiniciar() {
+  void reiniciar() async{
     estados_tarjetas.forEach((estadoTarjeta) {
-      if (estadoTarjeta.currentState.isFront)
+      if (!estadoTarjeta.currentState.isFront)
         estadoTarjeta.currentState.toggleCard();
     });
+
+    await Future.delayed(Duration(milliseconds: 500));
     aleatorizarTarjetas();
   }
 }
