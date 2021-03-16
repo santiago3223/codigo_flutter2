@@ -30,6 +30,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> opciones = ['a', 'b', 'c', 'd', 'e', 'f'];
   List<GlobalKey<FlipCardState>> estados_tarjetas = [];
+  int puntaje = 0;
+  int indicePrimeraTarjeta;
 
   void aleatorizarTarjetas() {
     setState(() {
@@ -37,8 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void tarjetaPresionada(int i ){
-    
+  void tarjetaPresionada(int i) {
+    if (indicePrimeraTarjeta == null) {
+      indicePrimeraTarjeta = i;
+    } else {
+      if (opciones[indicePrimeraTarjeta] == opciones[i]) {
+        puntaje++;
+        indicePrimeraTarjeta = null;
+      } else {
+        estados_tarjetas[indicePrimeraTarjeta].currentState.toggleCard();
+        estados_tarjetas[i].currentState.toggleCard();
+        indicePrimeraTarjeta = null;
+      }
+    }
   }
 
   @override
@@ -69,9 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: opciones.length,
               itemBuilder: (BuildContext context, int index) {
                 return FlipCard(
-
+                  onFlipDone: (defrente){
+                    if(!defrente){
+                    tarjetaPresionada(index);}
+                  },
                   key: estados_tarjetas[index],
-                   back: Container(
+                  back: Container(
                     child: Card(
                       color: Colors.orange.shade100,
                       child: Text(
@@ -96,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void reiniciar() async{
+  void reiniciar() async {
     estados_tarjetas.forEach((estadoTarjeta) {
       if (!estadoTarjeta.currentState.isFront)
         estadoTarjeta.currentState.toggleCard();
