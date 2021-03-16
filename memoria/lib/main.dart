@@ -29,13 +29,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   List<String> opciones = ['a', 'b', 'c', 'd', 'e', 'f'];
+  List<bool> giroTarjetas = [];
   List<GlobalKey<FlipCardState>> estados_tarjetas = [];
   int puntaje = 0;
   int indicePrimeraTarjeta;
 
   void aleatorizarTarjetas() {
+    giroTarjetas = [];
+    opciones.forEach((element) {
+      giroTarjetas.add(true);
+    });
     setState(() {
       opciones.shuffle();
+      giroTarjetas = giroTarjetas;
     });
   }
 
@@ -45,6 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       if (opciones[indicePrimeraTarjeta] == opciones[i]) {
         puntaje++;
+        print(giroTarjetas);
+        setState(() {
+          giroTarjetas[i] = false;
+          giroTarjetas[indicePrimeraTarjeta] = false;
+        });
         indicePrimeraTarjeta = null;
       } else {
         estados_tarjetas[indicePrimeraTarjeta].currentState.toggleCard();
@@ -82,9 +93,11 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: opciones.length,
               itemBuilder: (BuildContext context, int index) {
                 return FlipCard(
-                  onFlipDone: (defrente){
-                    if(!defrente){
-                    tarjetaPresionada(index);}
+                  flipOnTouch: giroTarjetas[index],
+                  onFlipDone: (defrente) {
+                    if (!defrente) {
+                      tarjetaPresionada(index);
+                    }
                   },
                   key: estados_tarjetas[index],
                   back: Container(
