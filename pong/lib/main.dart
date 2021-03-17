@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:pong/ball.dart';
 
@@ -46,19 +48,25 @@ class _MyHomePageState extends State<MyHomePage>
   Direction hDir = Direction.right;
   int velocidad = 1;
   int score = 0;
+  double aleatorioV = 1;
+  double aleatorioH = 1;
 
   void checkBorders() {
     if (posX <= 0 && hDir == Direction.left) {
       hDir = Direction.right;
+      aleatorioV=numeroAleatoreo();
     }
     if (posX >= width - 50 && hDir == Direction.right) {
       hDir = Direction.left;
+      aleatorioV=numeroAleatoreo();
     }
     if (posY <= 0 && vDir == Direction.up) {
       vDir = Direction.down;
+      aleatorioH=numeroAleatoreo();
     }
     if (posY >= heigth - 125 && vDir == Direction.down) {
       vDir = Direction.up;
+      aleatorioH=numeroAleatoreo();
     }
 
     if (posY >= heigth - 145) {
@@ -104,13 +112,19 @@ class _MyHomePageState extends State<MyHomePage>
     animation = Tween<double>(begin: 0, end: 1000).animate(controller);
     animation.addListener(() {
       setState(() {
-        posX = hDir == Direction.right ? posX + velocidad : posX - velocidad;
-        posY = vDir == Direction.down ? posY + velocidad : posY - velocidad;
+        posX = hDir == Direction.right ? posX + velocidad*aleatorioH : posX - velocidad*aleatorioH;
+        posY = vDir == Direction.down ? posY + velocidad*aleatorioV : posY - velocidad*aleatorioV;
       });
       checkBorders();
     });
     controller.forward();
     super.initState();
+  }
+
+  double numeroAleatoreo(){
+    Random r = Random();
+    int aleatorio = r.nextInt(101); // 0 - 100 
+    return (50 + aleatorio)/100; // 0.5 - 1.5 
   }
 
   @override
@@ -142,6 +156,8 @@ class _MyHomePageState extends State<MyHomePage>
                 left: batPosition,
                 child: GestureDetector(
                     onHorizontalDragUpdate: (DragUpdateDetails update) {
+                      double nuevaPosicionBat= batPosition +update.delta.dx;
+                      if (nuevaPosicionBat>0 && nuevaPosicionBat< width - batWidth)
                       setState(() {
                         batPosition += update.delta.dx;
                       });
