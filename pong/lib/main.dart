@@ -44,11 +44,12 @@ class _MyHomePageState extends State<MyHomePage>
   AnimationController controller;
   Direction vDir = Direction.down;
   Direction hDir = Direction.right;
+  int velocidad = 1;
+  int score = 0;
 
   void checkBorders() {
     if (posX <= 0 && hDir == Direction.left) {
       hDir = Direction.right;
-      
     }
     if (posX >= width - 50 && hDir == Direction.right) {
       hDir = Direction.left;
@@ -56,20 +57,42 @@ class _MyHomePageState extends State<MyHomePage>
     if (posY <= 0 && vDir == Direction.up) {
       vDir = Direction.down;
     }
-    if (posY >= heigth -125&&
-        vDir == Direction.down) {
+    if (posY >= heigth - 125 && vDir == Direction.down) {
       vDir = Direction.up;
     }
 
-    if (posY>=heigth-145){
-      if(posX >= batPosition-50 && posX <= (batPosition + batWidth+50)){
+    if (posY >= heigth - 145) {
+      if (posX >= batPosition - 50 && posX <= (batPosition + batWidth + 50)) {
         vDir = Direction.up;
-      }else{
+        velocidad++;
+        score++;
+      } else {
         controller.stop();
+        mostrarAlert(context);
       }
     }
+  }
 
-    
+  void mostrarAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text("Perdiste"),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        score=0;
+                        velocidad =1;
+                        posX=0;
+                        posY=0;
+                      });
+                      controller.repeat();
+                      Navigator.pop(context);
+                    },
+                    child: Text("reiniciar"))
+              ],
+            ));
   }
 
   @override
@@ -81,9 +104,8 @@ class _MyHomePageState extends State<MyHomePage>
     animation = Tween<double>(begin: 0, end: 1000).animate(controller);
     animation.addListener(() {
       setState(() {
-
-        posX = hDir == Direction.right ? posX + 1 : posX - 1;
-        posY = vDir == Direction.down ? posY + 1 : posY - 1;
+        posX = hDir == Direction.right ? posX + velocidad : posX - velocidad;
+        posY = vDir == Direction.down ? posY + velocidad : posY - velocidad;
       });
       checkBorders();
     });
@@ -105,6 +127,12 @@ class _MyHomePageState extends State<MyHomePage>
           child: Stack(
             children: [
               Positioned(
+                  right: 15,
+                  child: Text(
+                    "$score",
+                    style: TextStyle(fontSize: 25),
+                  )),
+              Positioned(
                 child: Ball(),
                 top: posY,
                 left: posX,
@@ -113,15 +141,15 @@ class _MyHomePageState extends State<MyHomePage>
                 bottom: 0,
                 left: batPosition,
                 child: GestureDetector(
-                  onHorizontalDragUpdate: (DragUpdateDetails update){
-                    setState(() {
-                      batPosition += update.delta.dx;
-                    });
-                  } ,
+                    onHorizontalDragUpdate: (DragUpdateDetails update) {
+                      setState(() {
+                        batPosition += update.delta.dx;
+                      });
+                    },
                     child: Bat(
-                  width: batWidth,
-                  heigth: 20,
-                )),
+                      width: batWidth,
+                      heigth: 20,
+                    )),
               ),
             ],
           ),
