@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<bool> giroTarjetas = [];
   List<GlobalKey<FlipCardState>> estados_tarjetas = [];
   int movimientos = 0;
-  int indicePrimeraTarjeta;
+  int indicePrimeraTarjeta;// lista que acumule las posiciones de las tarjetas ya voletadas
 
   void aleatorizarTarjetas() {
     giroTarjetas = [];
@@ -57,6 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       movimientos++;
     });
+    //nuesta lista de indices esta vacia?, si esta vacia agregamos el indice de la nueva tarjeta
+    //sino, verificamos que el indice de la tarjeta no contenga la misma imagen que los indices anteriores
+    // si tienen la misma foto, perdemos y llamamos al metodo reiniciar
+    // sino, no hacemos nada
+    // el length de nuestra lista es == 5, en este caso, ganamos 
+
 
     if (indicePrimeraTarjeta == null) {
       indicePrimeraTarjeta = i;
