@@ -14,8 +14,11 @@ class TimerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return MaterialButton(
+      child: Text(text, style: TextStyle(color: Colors.white),),
+      onPressed: onPressed,
+      color: color,
+      minWidth: size,
     );
   }
 }
