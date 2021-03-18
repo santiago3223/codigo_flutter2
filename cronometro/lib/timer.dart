@@ -37,7 +37,7 @@ class CountDownTimer {
 
   Future<void> startWork() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    work = prefs.getInt('trabajo');
+    work = prefs.getInt('trabajo')??30;
               
     _time = Duration(minutes: work);
     _fulltime = _time;
@@ -46,7 +46,7 @@ class CountDownTimer {
 
   Future<void>  startBreak() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    breakTime = prefs.getInt('break');
+    breakTime = prefs.getInt('break')??5;
     _time = Duration(minutes: breakTime);
     _fulltime = _time;
     _isActive = true;
@@ -54,7 +54,7 @@ class CountDownTimer {
 
   Future<void>  startDescanzo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    descanzo = prefs.getInt('descanzo');
+    descanzo = prefs.getInt('descanzo')??15;
     _time = Duration(minutes: descanzo);
     _fulltime = _time;
     _isActive = true;
