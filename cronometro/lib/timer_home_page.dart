@@ -4,6 +4,8 @@ import 'package:cronometro/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+import 'settings.dart';
+
 class TimerHomePage extends StatelessWidget {
   final CountDownTimer timer = CountDownTimer();
 
@@ -12,6 +14,9 @@ class TimerHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Timer"),
+        actions: [IconButton(icon: Icon(Icons.settings), onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (_)=> Settings()));
+        })],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) => Container(
@@ -37,7 +42,9 @@ class TimerHomePage extends StatelessWidget {
                       child: TimerButton(
                         text: "Break",
                         color: Colors.blueGrey,
-                        onPressed: () {},
+                        onPressed: () {
+                          timer.startBreak();
+                        },
                       ),
                     ),
                   ),
@@ -47,7 +54,9 @@ class TimerHomePage extends StatelessWidget {
                       child: TimerButton(
                         text: "Descanzo",
                         color: Colors.blueGrey.shade700,
-                        onPressed: () {},
+                        onPressed: () {
+                          timer.startDescanzo();
+                        },
                       ),
                     ),
                   ),
@@ -82,7 +91,9 @@ class TimerHomePage extends StatelessWidget {
                       child: TimerButton(
                         text: "Stop",
                         color: Colors.blueGrey.shade900,
-                        onPressed: () {},
+                        onPressed: () {
+                          timer.stop();
+                        },
                       ),
                     ),
                   ),
@@ -92,7 +103,9 @@ class TimerHomePage extends StatelessWidget {
                       child: TimerButton(
                         text: "Restart",
                         color: Colors.green.shade800,
-                        onPressed: () {},
+                        onPressed: () {
+                          timer.restart();
+                        },
                       ),
                     ),
                   ),

@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:cronometro/timer_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CountDownTimer {
   int work = 30;
+  int breakTime = 5;
+  int descanzo  = 15;
   bool _isActive = false;
   Timer timer;
   double _percentaje=1;
@@ -32,9 +35,36 @@ class CountDownTimer {
     });
   }
 
-  void startWork() {
+  Future<void> startWork() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    work = prefs.getInt('trabajo');
+              
     _time = Duration(minutes: work);
     _fulltime = _time;
+    _isActive = true;
+  }
+
+  Future<void>  startBreak() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    breakTime = prefs.getInt('break');
+    _time = Duration(minutes: breakTime);
+    _fulltime = _time;
+    _isActive = true;
+  }
+
+  Future<void>  startDescanzo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    descanzo = prefs.getInt('descanzo');
+    _time = Duration(minutes: descanzo);
+    _fulltime = _time;
+    _isActive = true;
+  }
+
+  void stop(){
+    _isActive = false;
+  }
+
+  void restart(){
     _isActive = true;
   }
 }
