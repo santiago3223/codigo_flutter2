@@ -9,7 +9,6 @@ class TimerHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    timer.startWork();
     return Scaffold(
       appBar: AppBar(
         title: Text("Timer"),
@@ -26,7 +25,9 @@ class TimerHomePage extends StatelessWidget {
                       child: TimerButton(
                         text: "Trabajo",
                         color: Colors.green.shade800,
-                        onPressed: () {},
+                        onPressed: () {
+                          timer.startWork();
+                        },
                       ),
                     ),
                   ),
@@ -53,9 +54,13 @@ class TimerHomePage extends StatelessWidget {
                 ],
               ),
               StreamBuilder(
+                initialData: TimerModel("00:00", 1),
                 stream: timer.stream(),
                 builder: (context, snapshot) {
-                  TimerModel timer = snapshot.data;
+                if(snapshot.hasError){
+                  return Text(snapshot.error.toString());
+                }
+                TimerModel timer = snapshot.data;
                 return Expanded(
                   child: CircularPercentIndicator(
                     radius: constraints.maxWidth / 1.5,
