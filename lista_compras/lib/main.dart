@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_compras/models/shoping_list.dart';
 import 'package:lista_compras/util/dbhelper.dart';
 
 void main() {
@@ -12,7 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
 
   final String title;
 
@@ -41,34 +40,54 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        
         title: Text(widget.title),
       ),
-      body: Center(
-        
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
+      body: ShList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          DbHelper().openDb();
+        onPressed: () async {
+          DbHelper helper = DbHelper();
+          await helper.openDb();
+
+          helper.insertList(ShoppingList(0, "Vegetales", 100));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
-      ), 
+      ),
     );
+  }
+}
+
+class ShList extends StatefulWidget {
+  @override
+  _ShListState createState() => _ShListState();
+}
+
+class _ShListState extends State<ShList> {
+  DbHelper helper = DbHelper();
+  List<ShoppingList> shoppingLists;
+
+  void initState() {
+    super.initState();
+    showData();
+
+  }
+
+  Future showData() async {
+    await helper.openDb();
+    shoppingLists = await helper.getLists();
+        setState(() {
+      
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: shoppingLists == null ? 0 : shoppingLists.length,
+        itemBuilder: (c, i) => ListTile(
+              title: Text(shoppingLists[i].name),
+            ));
   }
 }
