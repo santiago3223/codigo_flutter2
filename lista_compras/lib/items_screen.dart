@@ -36,6 +36,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
         itemCount: items == null ? 0 : items.length,
         itemBuilder: (c, i) => ListTile(
               title: Text(items[i].name),
+              subtitle: Text(items[i].quantity),
               trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
 
             )),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lista_compras/items_screen.dart';
 import 'package:lista_compras/models/shoping_list.dart';
+import 'package:lista_compras/shopping_list_dialog.dart';
 import 'package:lista_compras/util/dbhelper.dart';
 
 void main() {
@@ -68,9 +69,11 @@ class ShList extends StatefulWidget {
 class _ShListState extends State<ShList> {
   DbHelper helper = DbHelper();
   List<ShoppingList> shoppingLists;
+  ShoppingListDialog dialog;
 
   void initState() {
     super.initState();
+    dialog = ShoppingListDialog();
     showData();
   }
 
@@ -89,7 +92,14 @@ class _ShListState extends State<ShList> {
                 child: Text(shoppingLists[i].priority.toString()),
               ),
               title: Text(shoppingLists[i].name),
-              trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (c) =>
+                            dialog.buildDialog(c, shoppingLists[i], false));
+                  }),
               onTap: () {
                 Navigator.push(
                     context,
