@@ -5,6 +5,13 @@ import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
   final int version = 1;
+  static final DbHelper _dbHelper = DbHelper._internal();
+
+  DbHelper._internal();
+
+  factory DbHelper(){
+    return _dbHelper;
+  }
 
   Database db;
 

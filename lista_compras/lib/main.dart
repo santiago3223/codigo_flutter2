@@ -42,22 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: ShList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          DbHelper helper = DbHelper();
-          await helper.openDb();
-
-          helper.insertList(ShoppingList(0, "Vegetales", 100));
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
+    return ShList();
   }
 }
 
@@ -85,27 +70,42 @@ class _ShListState extends State<ShList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: shoppingLists == null ? 0 : shoppingLists.length,
-        itemBuilder: (c, i) => ListTile(
-              leading: CircleAvatar(
-                child: Text(shoppingLists[i].priority.toString()),
-              ),
-              title: Text(shoppingLists[i].name),
-              trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (c) =>
-                            dialog.buildDialog(c, shoppingLists[i], false));
-                  }),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (c) => ItemsScreen(shoppingLists[i])));
-              },
-            ));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Lista de compras"),
+      ),
+      body: ListView.builder(
+          itemCount: shoppingLists == null ? 0 : shoppingLists.length,
+          itemBuilder: (c, i) => ListTile(
+                leading: CircleAvatar(
+                  child: Text(shoppingLists[i].priority.toString()),
+                ),
+                title: Text(shoppingLists[i].name),
+                trailing: IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      showDialog(
+                              context: context,
+                              builder: (c) => dialog.buildDialog(
+                                  c, shoppingLists[i], false))
+                          .then((value) => {showData()});
+                    }),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => ItemsScreen(shoppingLists[i])));
+                },
+              )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          showDialog(
+              context: context,
+              builder: (c) =>
+                  dialog.buildDialog(c, ShoppingList(0, "", 0), true)).then((value) => showData());
+        },
+        child: Icon(Icons.add),
+      ),
+    );
   }
 }
