@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lista_compras/items_screen.dart';
 import 'package:lista_compras/models/shoping_list.dart';
 import 'package:lista_compras/util/dbhelper.dart';
 
@@ -71,15 +72,12 @@ class _ShListState extends State<ShList> {
   void initState() {
     super.initState();
     showData();
-
   }
 
   Future showData() async {
     await helper.openDb();
     shoppingLists = await helper.getLists();
-        setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override
@@ -87,7 +85,17 @@ class _ShListState extends State<ShList> {
     return ListView.builder(
         itemCount: shoppingLists == null ? 0 : shoppingLists.length,
         itemBuilder: (c, i) => ListTile(
+              leading: CircleAvatar(
+                child: Text(shoppingLists[i].priority.toString()),
+              ),
               title: Text(shoppingLists[i].name),
+              trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {}),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (c) => ItemsScreen(shoppingLists[i])));
+              },
             ));
   }
 }
