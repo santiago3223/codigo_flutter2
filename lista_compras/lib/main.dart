@@ -55,6 +55,7 @@ class _ShListState extends State<ShList> {
   DbHelper helper = DbHelper();
   List<ShoppingList> shoppingLists;
   ShoppingListDialog dialog;
+  GlobalKey<ScaffoldState> scaffold_key = GlobalKey();
 
   void initState() {
     super.initState();
@@ -71,38 +72,54 @@ class _ShListState extends State<ShList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffold_key,
       appBar: AppBar(
         title: Text("Lista de compras"),
       ),
       body: ListView.builder(
           itemCount: shoppingLists == null ? 0 : shoppingLists.length,
-          itemBuilder: (c, i) => ListTile(
-                leading: CircleAvatar(
-                  child: Text(shoppingLists[i].priority.toString()),
-                ),
-                title: Text(shoppingLists[i].name),
-                trailing: IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      showDialog(
-                              context: context,
-                              builder: (c) => dialog.buildDialog(
-                                  c, shoppingLists[i], false))
-                          .then((value) => {showData()});
-                    }),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => ItemsScreen(shoppingLists[i])));
+          itemBuilder: (c, i) => Dismissible(
+                key: Key(shoppingLists[i].id.toString()),
+                background: Container(color: Colors.red,),
+                onDismissed: (direction) {
+                  String name = shoppingLists[i].name;
+                  helper.deleteList(shoppingLists[i]);
+                  shoppingLists.removeAt(i);
+                  setState(() {
+                    shoppingLists = shoppingLists;
+                  });
+                  scaffold_key.currentState.showSnackBar(
+                      SnackBar(content: Text("Se ha eliminado $name")));
                 },
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Text(shoppingLists[i].priority.toString()),
+                  ),
+                  title: Text(shoppingLists[i].name),
+                  trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        showDialog(
+                                context: context,
+                                builder: (c) => dialog.buildDialog(
+                                    c, shoppingLists[i], false))
+                            .then((value) => {showData()});
+                      }),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => ItemsScreen(shoppingLists[i])));
+                  },
+                ),
               )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           showDialog(
-              context: context,
-              builder: (c) =>
-                  dialog.buildDialog(c, ShoppingList(0, "", 0), true)).then((value) => showData());
+                  context: context,
+                  builder: (c) =>
+                      dialog.buildDialog(c, ShoppingList(0, "", 0), true))
+              .then((value) => showData());
         },
         child: Icon(Icons.add),
       ),
