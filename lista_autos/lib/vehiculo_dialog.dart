@@ -12,7 +12,7 @@ class VehiculoDialog {
   TextEditingController placa = TextEditingController();
   TextEditingController color = TextEditingController();
 
-  Widget buildDialog(BuildContext c, Vehiculo v, bool isNew) {
+  Widget buildDialog(BuildContext c, Vehiculo v, bool isNew, bool editable) {
     if (isNew) {
       tipo.text = "";
       marca.text = "";
@@ -38,34 +38,41 @@ class VehiculoDialog {
         child: Column(
           children: [
             TextField(
+              enabled: editable,
               controller: tipo,
               decoration: InputDecoration(hintText: "Tipo"),
             ),
             TextField(
+              enabled: editable,
               controller: marca,
               decoration: InputDecoration(hintText: "Marca"),
             ),
             TextField(
+              enabled: editable,
               controller: modelo,
               decoration: InputDecoration(hintText: "Modelo"),
             ),
             TextField(
+              enabled: editable,
               controller: kilometraje,
               decoration: InputDecoration(hintText: "Km"),
             ),
             TextField(
+              enabled: editable,
               controller: imagen,
               decoration: InputDecoration(hintText: "Imagen"),
             ),
             TextField(
+              enabled: editable,
               controller: placa,
               decoration: InputDecoration(hintText: "Placa"),
             ),
             TextField(
+              enabled: editable,
               controller: color,
               decoration: InputDecoration(hintText: "Color"),
             ),
-            ElevatedButton(
+            editable?ElevatedButton(
               child: Text("Guardar"),
               onPressed: () {
                 v.tipo = tipo.text;
@@ -78,7 +85,7 @@ class VehiculoDialog {
                 helper.insertVehiculo(v);
                 Navigator.pop(c);
               },
-            )
+            ):Container()
           ],
         ),
       ),

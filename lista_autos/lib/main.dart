@@ -33,6 +33,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   VehiculoDialog dialog = VehiculoDialog();
+  List<Vehiculo> vehiculos;
+  List<Vehiculo> vehiculos_filtrados;
 
   void _incrementCounter() {
     setState(() {
@@ -40,9 +42,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void getData() {
+    DbHelper().getVehiculos().then((value) {
+      setState(() {
+        vehiculos = value;
+        vehiculos_filtrados = vehiculos;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getData();
   }
 
   @override
@@ -51,61 +63,69 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: FutureBuilder(
-        future: DbHelper().getVehiculos(),
-        builder: (c, snapshot) {
-          if (snapshot.hasData) {
-            List<Vehiculo> vehiculos = snapshot.data;
-            return ListView.builder(
-                itemCount: vehiculos.length,
-                itemBuilder: (c, i) => ListTile(
-                    leading: Text(vehiculos[i].kilometraje.toString()),
-                    title: Text(vehiculos[i].marca),
-                    subtitle: Text(vehiculos[i].modelo),
-                    trailing: Container(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.details),
-                            onPressed: () {
-
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (c) => dialog.buildDialog(
-                                      c,
-                                      vehiculos[i],
-                                      false)).then((value) {
-                                setState(() {});
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    )));
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+      body: Column(
+        children: [
+          TextField(
+            onChanged: (palabra) {
+              List<Vehiculo> filtradas = [];
+              for (Vehiculo v in vehiculos) {
+                if (v.marca.toLowerCase().contains(palabra.toLowerCase()) ||
+                    v.modelo.toLowerCase().contains(palabra.toLowerCase())) {
+                  filtradas.add(v);
+                }
+              }
+              setState(() {
+                vehiculos_filtrados = filtradas;
+              });
+            },
+          ),
+          vehiculos_filtrados == null
+              ? Container()
+              : Expanded(
+                  child: ListView.builder(
+                      itemCount: vehiculos_filtrados.length,
+                      itemBuilder: (c, i) => ListTile(
+                          leading: Text(
+                              vehiculos_filtrados[i].kilometraje.toString()),
+                          title: Text(vehiculos_filtrados[i].marca),
+                          subtitle: Text(vehiculos_filtrados[i].modelo),
+                          trailing: Container(
+                            width: 100,
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.details),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (c) => dialog.buildDialog(
+                                            c, vehiculos[i], false, false));
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () {
+                                    showDialog(
+                                            context: context,
+                                            builder: (c) => dialog.buildDialog(
+                                                c, vehiculos[i], false, true))
+                                        .then((value) {
+                                      setState(() {});
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ))))
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-                  context: context,
-                  builder: (c) => dialog.buildDialog(
-                      c, Vehiculo(0, "", "", "", 0, "", "", ""), true))
-              .then((value) {
+            context: context,
+            builder: (c) => dialog.buildDialog(
+                c, Vehiculo(0, "", "", "", 0, "", "", ""), true, true),
+          ).then((value) {
             setState(() {});
           });
         },
