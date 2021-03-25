@@ -35,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   VehiculoDialog dialog = VehiculoDialog();
   List<Vehiculo> vehiculos;
   List<Vehiculo> vehiculos_filtrados;
+  bool switchValue = false;
 
   void _incrementCounter() {
     setState(() {
@@ -78,6 +79,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 vehiculos_filtrados = filtradas;
               });
             },
+          ),
+          Row(
+            children: [
+              Text("Asc"),
+              Switch(
+                  value: switchValue,
+                  onChanged: (value) {
+                    setState(() {
+                      switchValue = value;
+                      if (value) {
+                        vehiculos_filtrados.sort((v1, v2) =>
+                            v1.kilometraje.compareTo(v2.kilometraje));
+                      } else {
+                        vehiculos_filtrados.sort((v2, v1) =>
+                            v1.kilometraje.compareTo(v2.kilometraje));
+                      }
+                    });
+                  }),
+              Text("Desc"),
+            ],
           ),
           vehiculos_filtrados == null
               ? Container()
