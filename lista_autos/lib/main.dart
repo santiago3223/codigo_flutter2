@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lista_autos/dbhelper.dart';
+import 'package:lista_autos/vehiculo_dialog.dart';
 
 import 'models/vehiculo.dart';
 
@@ -31,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  VehiculoDialog dialog = VehiculoDialog();
 
   void _incrementCounter() {
     setState(() {
@@ -70,7 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (c) => dialog.buildDialog(
+                  c, Vehiculo(0, "", "", "", 0, "", "", ""), true));
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
