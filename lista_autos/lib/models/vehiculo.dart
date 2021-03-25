@@ -13,6 +13,7 @@ class Vehiculo {
 
   Map<String, dynamic> toMap() {
     return {
+      "id": id==0?null:id,
       "tipo": tipo,
       "marca": marca,
       "modelo": modelo,
@@ -24,6 +25,7 @@ class Vehiculo {
   }
 
   Vehiculo.fromMap(Map<String, dynamic> map) {
+    this.id = map["id"]; 
     this.tipo = map["tipo"];
     this.marca = map["marca"];
     this.modelo = map["modelo"];

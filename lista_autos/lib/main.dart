@@ -58,8 +58,36 @@ class _MyHomePageState extends State<MyHomePage> {
             List<Vehiculo> vehiculos = snapshot.data;
             return ListView.builder(
                 itemCount: vehiculos.length,
-                itemBuilder: (c, i) =>
-                    ListTile(title: Text(vehiculos[i].modelo)));
+                itemBuilder: (c, i) => ListTile(
+                    leading: Text(vehiculos[i].kilometraje.toString()),
+                    title: Text(vehiculos[i].marca),
+                    subtitle: Text(vehiculos[i].modelo),
+                    trailing: Container(
+                      width: 100,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.details),
+                            onPressed: () {
+
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (c) => dialog.buildDialog(
+                                      c,
+                                      vehiculos[i],
+                                      false)).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    )));
           }
           if (snapshot.hasError) {
             return Center(
@@ -74,9 +102,12 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-              context: context,
-              builder: (c) => dialog.buildDialog(
-                  c, Vehiculo(0, "", "", "", 0, "", "", ""), true));
+                  context: context,
+                  builder: (c) => dialog.buildDialog(
+                      c, Vehiculo(0, "", "", "", 0, "", "", ""), true))
+              .then((value) {
+            setState(() {});
+          });
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

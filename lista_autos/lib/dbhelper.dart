@@ -29,7 +29,7 @@ class DbHelper {
   }
 
   Future<int> insertVehiculo(Vehiculo v) async {
-    int id = await db.insert("vehiculos", v.toMap());
+    int id = await db.insert("vehiculos", v.toMap(),conflictAlgorithm: ConflictAlgorithm.replace);
     return id;
   }
 
