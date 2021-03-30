@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:nbapp/gamesView.dart';
 
 import 'models/team.dart';
 
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: equipos == null
                   ? CircularProgressIndicator()
                   : CarouselSlider(
-                      options: CarouselOptions(height: 500.0),
+                      options: CarouselOptions(height: 600.0),
                       items: equipos.map((i) {
                         return Builder(
                           builder: (BuildContext context) {
@@ -153,7 +154,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                               ),
                                             ],
                                           ),
-                                        )
+                                        ),
+                                        ElevatedButton(onPressed: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => GamesView(i)));
+                                        }, child: Text("Partidos"))
                                       ],
                                     ),
                                   ),
