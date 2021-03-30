@@ -62,7 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
             decoration: BoxDecoration(
                 image: DecorationImage(
                     image: NetworkImage(
-                        "https://i.pinimg.com/originals/e9/5f/56/e95f56d52fea3ab71221fdc5d10efbd0.jpg"),fit: BoxFit.cover)),
+                        "https://i.pinimg.com/originals/e9/5f/56/e95f56d52fea3ab71221fdc5d10efbd0.jpg"),
+                    fit: BoxFit.cover)),
           ),
           Center(
               child: equipos == null
@@ -77,20 +78,84 @@ class _MyHomePageState extends State<MyHomePage> {
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Card(
                                   color: Colors.black.withOpacity(0.5),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        i.city,
-                                        style: TextStyle(color :Colors.white, fontSize: 20.0),
-                                      ),
-                                      Text(
-                                        i.name,
-                                        style: TextStyle(color :Colors.white, fontSize: 40.0),
-                                      ),
-                                      Image.network(urlLogo +
-                                          i.abbreviation.toLowerCase() +
-                                          ".png")
-                                    ],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          i.city,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0),
+                                        ),
+                                        Text(
+                                          i.name,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 40.0),
+                                        ),
+                                        Image.network(urlLogo +
+                                            i.abbreviation.toLowerCase() +
+                                            ".png"),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text(
+                                          "${i.fullName}",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 8,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20, right: 20),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Conferencia:",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18
+                                                ),
+                                              ),
+                                              Text(
+                                                "${i.conference}",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20, right: 20),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Division:",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18
+                                                ),
+                                              ),
+                                              Text(
+                                                "${i.division}",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ));
                           },
