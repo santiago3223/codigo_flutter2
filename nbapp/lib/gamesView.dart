@@ -27,6 +27,16 @@ class _GamesViewState extends State<GamesView> {
                         "https://i.pinimg.com/originals/e9/5f/56/e95f56d52fea3ab71221fdc5d10efbd0.jpg"),
                     fit: BoxFit.cover)),
           ),
+          Positioned(
+              top: 55,
+              left: 15,
+              child: IconButton(
+                  iconSize: 35,
+                  color: Colors.white,
+                  icon: Icon(Icons.arrow_back_rounded),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })),
           Column(
             children: [
               SizedBox(
