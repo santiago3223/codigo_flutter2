@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'models/game.dart';
 import 'models/team.dart';
 
@@ -34,7 +35,7 @@ class _GamesViewState extends State<GamesView> {
                 List<Game> games = jsonDecode(s.data.body)["data"]
                     .map<Game>((m) => Game.fromJson(m))
                     .toList();
-
+                games.sort((g1, g2) => g2.date.compareTo(g1.date));
                 return Container(
                   child: ListView.builder(
                       itemCount: games.length,
@@ -58,7 +59,7 @@ class _GamesViewState extends State<GamesView> {
 }
 
 class GameCard extends StatelessWidget {
-  const GameCard({
+  GameCard({
     Key key,
     @required this.game,
   }) : super(key: key);
@@ -66,6 +67,7 @@ class GameCard extends StatelessWidget {
   final Game game;
   final String urlLogo =
       "https://www.nba.com/.element/img/1.0/teamsites/logos/teamlogos_500x500/";
+  final DateFormat format = DateFormat("dd/MM/y");
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +75,10 @@ class GameCard extends StatelessWidget {
       color: Colors.white.withOpacity(0.8),
       margin: EdgeInsets.only(top: 8, left: 24, right: 24),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
+            Text(format.format(game.date)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
