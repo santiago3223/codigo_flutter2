@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
-  logger: ^1.0.0
+  logger: ^0.7.0
+  logger_flutter: ^0.7.1
 
 
   # The following adds the Cupertino Icons font to your application.
