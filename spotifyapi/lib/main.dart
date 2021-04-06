@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:spotifyapi/moderls/busqueda_artistas.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -37,11 +35,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Logger logger = Logger();
   BusquedaArtistas busquedaArtistas;
+  TextEditingController controller = TextEditingController();
 
   void buscarArtistas() async {
-    http.Response response =
-        await http.get(Uri.parse("https://api.spotify.com/v1/search?q=metallica&type=artist"),headers: {
-          "Authorization" : "Bearer BQDW9LPYvUc6AUV39Tgb68KLtgWeOWZbZFgI1TYyhommiX6kPGJE9g93-2TMyclVd7c2BeNP16X2yjhbU-8AMVNhvoQDcLX394zIu78jyCLqzmnzPOiY7pIJv2t-OCTRuXbO9IwP1KhZIcUDFs043eLjReRsOhb2w6vor7LJlsCwwdESkhyWnU_U08QvjPiJflpwPsl2JbgboYdeojPhu4u7MNHeEmyquh9uTAu2H7_P4ILuuJP3MtgEMy-2xfIg0QHthQRbtTm6-A1tzpdU4A"
+    http.Response response = await http.get(
+        Uri.parse(
+            "https://api.spotify.com/v1/search?q=${controller.text}&type=artist"),
+        headers: {
+          "Authorization":
+              "Bearer BQDkciIPkyAlaQctHhTO2MOFPhfvHPsw6kubbfMt8AhpOVwRcDZPnFQcXfILhT2y2OJtANhoDb7QTblMO8fqVVsNlW3ATZvgbrn4yMGCh-ipWRzLuAfYKMA8bkLnUKx-lGFbpFW3sUSmwtBgU_euDDXKq3BIrjhFaeDoSnvKGb7mxp3mVX8GTisEl--Wta-8gOp0sdWh_lTyiDyAQcuJxkblR6cgtLy5qx7MVMccAkUO_SC4NJ-KpjMxs1_iQ5EyL1keladtIJoYfxUHkDpS_g"
         });
     if (response.statusCode == 200) {
       BusquedaArtistas bArtistas =
@@ -60,14 +62,58 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        child: ListView.builder(
-          itemCount: busquedaArtistas.artists.items.length,
-          itemBuilder: (c,i)=>ListTile(title: Text(busquedaArtistas.artists.items[i].name),)),
+      body: Column(
+        children: [
+          TextField(
+            controller: controller,
+          ),
+          Expanded(
+            child: Container(
+                child: busquedaArtistas == null
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        itemCount: busquedaArtistas.artists.items.length,
+                        itemBuilder: (c, i) {
+                          List<Item> artistas = busquedaArtistas.artists.items;
+                          return ListTile(
+                            leading: artistas[i].images.length == 0
+                                ? Container(
+                                    width: 70,
+                                  )
+                                : Image.network(
+                                    artistas[i].images[0].url,
+                                    width: 70,
+                                  ),
+                            title: Text(artistas[i].name),
+                            subtitle: Text(artistas[i].genres.join(", ")),
+                            trailing:
+                                Text(artistas[i].followers.total.toString()),
+                          );
+                        },
+                      )),
+          ),
+          Row(
+            children: [
+              ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_back),
+                  label: Text("Atras")),
+              ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.arrow_forward),
+                  label: Text("Siguiente"))
+            ],
+          )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.search), onPressed: (){
-        buscarArtistas();
-      },),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.search),
+        onPressed: () {
+          buscarArtistas();
+        },
+      ),
     );
   }
 }
