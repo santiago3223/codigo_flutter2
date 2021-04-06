@@ -36,14 +36,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Logger logger = Logger();
   BusquedaArtistas busquedaArtistas;
   TextEditingController controller = TextEditingController();
+  String apiUrl= "https://api.spotify.com/v1/";
 
-  void buscarArtistas() async {
+  void buscarArtistas(String url) async {
     http.Response response = await http.get(
-        Uri.parse(
-            "https://api.spotify.com/v1/search?q=${controller.text}&type=artist"),
+        Uri.parse(url),
         headers: {
           "Authorization":
-              "Bearer BQDkciIPkyAlaQctHhTO2MOFPhfvHPsw6kubbfMt8AhpOVwRcDZPnFQcXfILhT2y2OJtANhoDb7QTblMO8fqVVsNlW3ATZvgbrn4yMGCh-ipWRzLuAfYKMA8bkLnUKx-lGFbpFW3sUSmwtBgU_euDDXKq3BIrjhFaeDoSnvKGb7mxp3mVX8GTisEl--Wta-8gOp0sdWh_lTyiDyAQcuJxkblR6cgtLy5qx7MVMccAkUO_SC4NJ-KpjMxs1_iQ5EyL1keladtIJoYfxUHkDpS_g"
+              "Bearer BQB7vZxC8cfDLVNWQQyUU2GUB7aCpwbMJkw3tEJD1VwWavw0OpI28prT5yfhfhpsAgfrWPQpnooRWlwD_aRfj51J79g_mkJDUpVSnbX9qpz627g56Qunt5cJuwFC2RKZ1L7tDqC8VPmvURXA4H-Y2aL8Z4yzOV1Uhd7SwDJqskSUIpWzgYZ1iW5bvhDlZztCbMlWxTsgiDW6LvHlZwSKXJUB81cJDCmCWVYpvQbx8WKwcP3Uuu8tHbc-xa1oVItIhJCq9ScKSv9J2Eam6rabxA"
         });
     if (response.statusCode == 200) {
       BusquedaArtistas bArtistas =
@@ -96,12 +96,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Row(
             children: [
-              ElevatedButton.icon(
-                  onPressed: () {},
+             busquedaArtistas.artists.previous==null?Container(): ElevatedButton.icon(
+                  onPressed: () {
+                    buscarArtistas(busquedaArtistas.artists.previous);
+                  },
                   icon: Icon(Icons.arrow_back),
                   label: Text("Atras")),
-              ElevatedButton.icon(
-                  onPressed: () {},
+              busquedaArtistas.artists.next==null?Container(): ElevatedButton.icon(
+                  onPressed: () {
+                    buscarArtistas(busquedaArtistas.artists.next);
+                  },
                   icon: Icon(Icons.arrow_forward),
                   label: Text("Siguiente"))
             ],
@@ -111,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          buscarArtistas();
+          buscarArtistas(apiUrl+"search?q=${controller.text}&type=artist");
         },
       ),
     );
