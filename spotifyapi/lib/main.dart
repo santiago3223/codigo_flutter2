@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void buscarArtistas(String url) async {
     http.Response response = await http.get(Uri.parse(url), headers: {
       "Authorization":
-          "Bearer BQB9CdB9kBsvrb4xAQgUuj5tOHqQU0sMUSy1O99E5D_5u4bsUr7A_eaTDz4FHE9KIrUUHVHL11amXKxN3cUTxoBiEzCss83SUg8SRTiPRpRlGDD14DOjwYKAEkFWY7xBjRZSbDw5SEd84L8XeKm7_I6NogMmOhd4zUPkalWvoluXJuyIHPe70pnD8o5P18522DE5ij9-aB5CdFwdz02HKlAH-vmPb17Tz2VKfqtOZ-72pea6EEK5md4_4NnAizzr2SpAeOV9k9q5tA0UWhpEJA"
+          "Bearer BQD2tCejkrzyi5CcWAbG0YoDGWVaGRphZb8YujHBh5iCinGtzD98lZUDcfx0iNu2gR8QXn7AUmpkIlzT3DxWtYLLpZF0q6tfIHgIc7rumVfMA7CposnZUy99Y009YPw6xgi-IOgnQEt0VFdELaiChXSShNxfxb7vJQbClAVLn6D7hWkpJ0VjzWQcb8PtOHLH7BEiUND5ER-GpB1RhRPy0SNh8a3HA7Ek_Fdz-NnC6gVh4shbqmPXZ5Q5nVdoKycJnolptAZ-GTI9afM4OSzA3A"
     });
     if (response.statusCode == 200) {
       Busqueda bArtistas = Busqueda.fromJson(jsonDecode(response.body));
@@ -112,54 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          Expanded(
-            child: Container(
-                child: busquedaArtistas == null
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        itemCount: busquedaArtistas.artists.items.length,
-                        itemBuilder: (c, i) {
-                          List<Item> artistas = busquedaArtistas.artists.items;
-                          return ListTile(
-                            leading: artistas[i].images.length == 0
-                                ? Container(
-                                    width: 70,
-                                  )
-                                : Image.network(
-                                    artistas[i].images[0].url,
-                                    width: 70,
-                                  ),
-                            title: Text(artistas[i].name),
-                            subtitle: Text(artistas[i].genres.join(", ")),
-                            trailing:
-                                Text(artistas[i].followers.total.toString()),
-                          );
-                        },
-                      )),
-          ),
-          Row(
-            children: [
-              busquedaArtistas == null ||
-                      busquedaArtistas.artists.previous == null
-                  ? Container()
-                  : ElevatedButton.icon(
-                      onPressed: () {
-                        buscarArtistas(busquedaArtistas.artists.previous);
-                      },
-                      icon: Icon(Icons.arrow_back),
-                      label: Text("Atras")),
-              busquedaArtistas == null || busquedaArtistas.artists.next == null
-                  ? Container()
-                  : ElevatedButton.icon(
-                      onPressed: () {
-                        buscarArtistas(busquedaArtistas.artists.next);
-                      },
-                      icon: Icon(Icons.arrow_forward),
-                      label: Text("Siguiente"))
-            ],
-          ),
+          buildArtists(),
           buildPlaylists()
         ],
       ),
@@ -178,42 +131,93 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Container buildPlaylists() {
+  Widget buildArtists() {
+    if (busquedaArtistas == null || busquedaArtistas.artists == null) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        Text("Artistas", style: Theme.of(context).textTheme.headline6,),
+        Container(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: busquedaArtistas.artists.items.length,
+            itemBuilder: (c, i) {
+              return Container(
+                      height: 200,
+                      width: 200,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: 25,
+                              child: Text(
+                                busquedaArtistas.artists.items[i].name,
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Image.network(
+                            busquedaArtistas.artists.items[i].images[0].url,
+                            height: 100,
+                          ),
+                          Text(busquedaArtistas.artists.items[i].popularity.toString()
+                              .toString()),
+                        ],
+                      )),
+                    );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildPlaylists() {
     if (busquedaArtistas == null || busquedaArtistas.playlists == null) {
       return Container();
     } else {
-      return Container(
-        height: 200,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: busquedaArtistas.playlists.items.length,
-            itemBuilder: (c, i) => Container(
-                  height: 200,
-                  width: 200,
-                  child: Card(
-                      child: Column(
-                    children: [
-                      Container(
-                          height: 25,
-                          child: Text(
-                            busquedaArtistas.playlists.items[i].name,
-                            style: Theme.of(context).textTheme.subtitle1,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Image.network(
-                        busquedaArtistas.playlists.items[i].images[0].url,
-                        height: 100,
-                      ),
-                      Text(busquedaArtistas
-                          .playlists.items[i].owner.displayName),
-                      Text(busquedaArtistas.playlists.items[i].tracks.total
-                          .toString()),
-                    ],
-                  )),
-                )),
+      return Column(
+        children: [
+          Text("Playlists", style: Theme.of(context).textTheme.headline6,),
+          Container(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: busquedaArtistas.playlists.items.length,
+                itemBuilder: (c, i) => Container(
+                      height: 200,
+                      width: 200,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: 25,
+                              child: Text(
+                                busquedaArtistas.playlists.items[i].name,
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Image.network(
+                            busquedaArtistas.playlists.items[i].images[0].url,
+                            height: 100,
+                          ),
+                          Text(busquedaArtistas
+                              .playlists.items[i].owner.displayName),
+                          Text(busquedaArtistas.playlists.items[i].tracks.total
+                              .toString()),
+                        ],
+                      )),
+                    )),
+          ),
+        ],
       );
     }
   }

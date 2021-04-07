@@ -18,8 +18,8 @@ class Busqueda {
     Playlists playlists;
 
     factory Busqueda.fromJson(Map<String, dynamic> json) => Busqueda(
-        artists: Artists.fromJson(json["artists"]),
-        playlists: Playlists.fromJson(json["playlists"])
+        artists: json["artists"]==null?null:Artists.fromJson(json["artists"]),
+        playlists: json["playlists"]==null?null: Playlists.fromJson(json["playlists"])
     );
 
     Map<String, dynamic> toJson() => {
