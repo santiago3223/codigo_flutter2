@@ -23,8 +23,8 @@ class Busqueda {
     );
 
     Map<String, dynamic> toJson() => {
-        "artists": artists.toJson(),
-        "playlists": playlists.toJson(),
+        "artists": artists==null?null: artists.toJson(),
+        "playlists": playlists==null?null: playlists.toJson(),
     };
 }
 

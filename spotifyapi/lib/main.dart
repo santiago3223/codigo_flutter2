@@ -51,8 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
           "Bearer BQB9CdB9kBsvrb4xAQgUuj5tOHqQU0sMUSy1O99E5D_5u4bsUr7A_eaTDz4FHE9KIrUUHVHL11amXKxN3cUTxoBiEzCss83SUg8SRTiPRpRlGDD14DOjwYKAEkFWY7xBjRZSbDw5SEd84L8XeKm7_I6NogMmOhd4zUPkalWvoluXJuyIHPe70pnD8o5P18522DE5ij9-aB5CdFwdz02HKlAH-vmPb17Tz2VKfqtOZ-72pea6EEK5md4_4NnAizzr2SpAeOV9k9q5tA0UWhpEJA"
     });
     if (response.statusCode == 200) {
-      Busqueda bArtistas =
-          Busqueda.fromJson(jsonDecode(response.body));
+      Busqueda bArtistas = Busqueda.fromJson(jsonDecode(response.body));
       setState(() {
         busquedaArtistas = bArtistas;
       });
@@ -160,7 +159,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icon(Icons.arrow_forward),
                       label: Text("Siguiente"))
             ],
-          )
+          ),
+          buildPlaylists()
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -176,5 +176,45 @@ class _MyHomePageState extends State<MyHomePage> {
         },
       ),
     );
+  }
+
+  Container buildPlaylists() {
+    if (busquedaArtistas == null || busquedaArtistas.playlists == null) {
+      return Container();
+    } else {
+      return Container(
+        height: 200,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: busquedaArtistas.playlists.items.length,
+            itemBuilder: (c, i) => Container(
+                  height: 200,
+                  width: 200,
+                  child: Card(
+                      child: Column(
+                    children: [
+                      Container(
+                          height: 25,
+                          child: Text(
+                            busquedaArtistas.playlists.items[i].name,
+                            style: Theme.of(context).textTheme.subtitle1,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Image.network(
+                        busquedaArtistas.playlists.items[i].images[0].url,
+                        height: 100,
+                      ),
+                      Text(busquedaArtistas
+                          .playlists.items[i].owner.displayName),
+                      Text(busquedaArtistas.playlists.items[i].tracks.total
+                          .toString()),
+                    ],
+                  )),
+                )),
+      );
+    }
   }
 }
