@@ -1,29 +1,3 @@
-// To parse this JSON data, do
-//
-//     final busquedaArtistas = busquedaArtistasFromJson(jsonString);
-
-import 'dart:convert';
-
-BusquedaArtistas busquedaArtistasFromJson(String str) => BusquedaArtistas.fromJson(json.decode(str));
-
-String busquedaArtistasToJson(BusquedaArtistas data) => json.encode(data.toJson());
-
-class BusquedaArtistas {
-    BusquedaArtistas({
-        this.artists,
-    });
-
-    Artists artists;
-
-    factory BusquedaArtistas.fromJson(Map<String, dynamic> json) => BusquedaArtistas(
-        artists: Artists.fromJson(json["artists"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "artists": artists.toJson(),
-    };
-}
-
 class Artists {
     Artists({
         this.href,

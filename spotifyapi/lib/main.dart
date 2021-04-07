@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:spotifyapi/moderls/busqueda_artistas.dart';
+
+import 'moderls/artists.dart';
+import 'moderls/busqueda.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Logger logger = Logger();
-  BusquedaArtistas busquedaArtistas;
+  Busqueda busquedaArtistas;
   TextEditingController controller = TextEditingController();
   List<Map> filtros = [
     {"nombre": "album", "valor": false},
@@ -46,11 +48,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void buscarArtistas(String url) async {
     http.Response response = await http.get(Uri.parse(url), headers: {
       "Authorization":
-          "Bearer BQB7vZxC8cfDLVNWQQyUU2GUB7aCpwbMJkw3tEJD1VwWavw0OpI28prT5yfhfhpsAgfrWPQpnooRWlwD_aRfj51J79g_mkJDUpVSnbX9qpz627g56Qunt5cJuwFC2RKZ1L7tDqC8VPmvURXA4H-Y2aL8Z4yzOV1Uhd7SwDJqskSUIpWzgYZ1iW5bvhDlZztCbMlWxTsgiDW6LvHlZwSKXJUB81cJDCmCWVYpvQbx8WKwcP3Uuu8tHbc-xa1oVItIhJCq9ScKSv9J2Eam6rabxA"
+          "Bearer BQB9CdB9kBsvrb4xAQgUuj5tOHqQU0sMUSy1O99E5D_5u4bsUr7A_eaTDz4FHE9KIrUUHVHL11amXKxN3cUTxoBiEzCss83SUg8SRTiPRpRlGDD14DOjwYKAEkFWY7xBjRZSbDw5SEd84L8XeKm7_I6NogMmOhd4zUPkalWvoluXJuyIHPe70pnD8o5P18522DE5ij9-aB5CdFwdz02HKlAH-vmPb17Tz2VKfqtOZ-72pea6EEK5md4_4NnAizzr2SpAeOV9k9q5tA0UWhpEJA"
     });
     if (response.statusCode == 200) {
-      BusquedaArtistas bArtistas =
-          BusquedaArtistas.fromJson(jsonDecode(response.body));
+      Busqueda bArtistas =
+          Busqueda.fromJson(jsonDecode(response.body));
       setState(() {
         busquedaArtistas = bArtistas;
       });
@@ -87,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 selected: filtros[1]["valor"],
                 onSelected: (b) {
                   setState(() {
-                    filtros[0]["valor"] = b;
+                    filtros[1]["valor"] = b;
                   });
                 },
               ),
@@ -164,7 +166,13 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          buscarArtistas(apiUrl + "search?q=${controller.text}&type=artist");
+          String tipos = filtros
+              .where((element) => element["valor"])
+              .map((e) => e["nombre"])
+              .toList()
+              .join(",");
+
+          buscarArtistas(apiUrl + "search?q=${controller.text}&type=$tipos");
         },
       ),
     );
