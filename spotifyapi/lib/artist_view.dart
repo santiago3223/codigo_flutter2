@@ -8,6 +8,8 @@ import 'moderls/albums.dart';
 import 'moderls/artists.dart' as artistas;
 import 'package:http/http.dart' as http;
 
+import 'moderls/tracks.dart';
+
 class ArtistView extends StatefulWidget {
   final artistas.Item artist;
 
@@ -20,6 +22,21 @@ class ArtistView extends StatefulWidget {
 class _ArtistViewState extends State<ArtistView> {
   Logger logger = Logger();
   Albums albums;
+  Tracks tracks;
+
+  void buscarCanciones() async {
+    http.Response response = await http.get(
+        Uri.parse(apiUrl + "artists/${widget.artist.id}/top-tracks?market=PE"),
+        headers: {"Authorization": "Bearer $token"});
+    if (response.statusCode == 200) {
+      Tracks t = Tracks.fromJson(jsonDecode(response.body));
+      setState(() {
+        tracks = t;
+      });
+    } else {
+      logger.e(jsonDecode(response.body).toString());
+    }
+  }
 
   void buscarAlbums() async {
     http.Response response = await http.get(
@@ -38,20 +55,33 @@ class _ArtistViewState extends State<ArtistView> {
   @override
   void initState() {
     buscarAlbums();
+    buscarCanciones();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.artist.name),
-      ),
-      body: buildAlbums()
-    );
+        appBar: AppBar(
+          title: Text(widget.artist.name),
+        ),
+        body: Column(
+          children: [
+            tracks == null ?Container():
+            Expanded(
+              child: ListView.builder(
+                  itemCount: tracks.tracks.length,
+                  itemBuilder: (c, i) => ListTile(
+                        title: Text(tracks.tracks[i].name),
+                        trailing: Text(tracks.tracks[i].popularity.toString()),
+                      )),
+            ),
+            buildAlbums(),
+          ],
+        ));
   }
 
-   Widget buildAlbums() {
+  Widget buildAlbums() {
     if (albums == null) {
       return Container();
     } else {
@@ -91,8 +121,7 @@ class _ArtistViewState extends State<ArtistView> {
                                   height: 100,
                                 ),
                           Text(albums.items[i].releaseDate),
-                          Text(albums.items[i].totalTracks
-                              .toString()),
+                          Text(albums.items[i].totalTracks.toString()),
                         ],
                       )),
                     )),
