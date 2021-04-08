@@ -112,7 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             buildArtists(),
-            buildPlaylists()
+            buildPlaylists(),
+            buildAlbums(),
+            buildTracks()
           ],
         ),
       ),
@@ -237,6 +239,111 @@ class _MyHomePageState extends State<MyHomePage> {
                           Text(busquedaArtistas
                               .playlists.items[i].owner.displayName),
                           Text(busquedaArtistas.playlists.items[i].tracks.total
+                              .toString()),
+                        ],
+                      )),
+                    )),
+          ),
+        ],
+      );
+    }
+  }
+
+   Widget buildAlbums() {
+    if (busquedaArtistas == null || busquedaArtistas.albums == null) {
+      return Container();
+    } else {
+      return Column(
+        children: [
+          Text(
+            "Albums",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Container(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: busquedaArtistas.albums.items.length,
+                itemBuilder: (c, i) => Container(
+                      height: 200,
+                      width: 200,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: 25,
+                              child: Text(
+                                busquedaArtistas.albums.items[i].name,
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          busquedaArtistas.albums.items[i].images.length > 0
+                              ? Image.network(
+                                  busquedaArtistas
+                                      .albums.items[i].images[0].url,
+                                  height: 100,
+                                )
+                              : Container(
+                                  height: 100,
+                                ),
+                          Text(busquedaArtistas
+                              .albums.items[i].releaseDate),
+                          Text(busquedaArtistas.albums.items[i].totalTracks
+                              .toString()),
+                        ],
+                      )),
+                    )),
+          ),
+        ],
+      );
+    }
+  }
+
+
+  Widget buildTracks() {
+    if (busquedaArtistas == null || busquedaArtistas.tracks == null) {
+      return Container();
+    } else {
+      return Column(
+        children: [
+          Text(
+            "Albums",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Container(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: busquedaArtistas.tracks.tracks.length,
+                itemBuilder: (c, i) => Container(
+                      height: 200,
+                      width: 200,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: 25,
+                              child: Text(
+                                busquedaArtistas.tracks.tracks[i].name,
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          busquedaArtistas.tracks.tracks[i].album.images.length > 0
+                              ? Image.network(
+                                  busquedaArtistas
+                                      .tracks.tracks[i].album.images[0].url,
+                                  height: 100,
+                                )
+                              : Container(
+                                  height: 100,
+                                ),
+                          Text(busquedaArtistas.tracks.tracks[i].album.name
                               .toString()),
                         ],
                       )),
