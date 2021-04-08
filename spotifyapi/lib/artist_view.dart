@@ -47,9 +47,58 @@ class _ArtistViewState extends State<ArtistView> {
       appBar: AppBar(
         title: Text(widget.artist.name),
       ),
-      body: albums==null?Container():ListView.builder(
-        itemCount: albums.items.length,
-        itemBuilder: (c, i)=> ListTile(title: Text(albums.items[i].name),)),
+      body: buildAlbums()
     );
+  }
+
+   Widget buildAlbums() {
+    if (albums == null) {
+      return Container();
+    } else {
+      return Column(
+        children: [
+          Text(
+            "Albums",
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Container(
+            height: 200,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: albums.items.length,
+                itemBuilder: (c, i) => Container(
+                      height: 200,
+                      width: 200,
+                      child: Card(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: 25,
+                              child: Text(
+                                albums.items[i].name,
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          albums.items[i].images.length > 0
+                              ? Image.network(
+                                  albums.items[i].images[0].url,
+                                  height: 100,
+                                )
+                              : Container(
+                                  height: 100,
+                                ),
+                          Text(albums.items[i].releaseDate),
+                          Text(albums.items[i].totalTracks
+                              .toString()),
+                        ],
+                      )),
+                    )),
+          ),
+        ],
+      );
+    }
   }
 }
