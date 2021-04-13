@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void loadCharacters() {
     String key =
         hasher.convert(utf8.encode(ts + privateKey + publicKey)).toString();
-    String params = "?ts=$ts&apikey=$publicKey&hash=$key";
+    String params = "?ts=$ts&apikey=$publicKey&hash=$key&limit=100";
     http.get(Uri.parse(apiUrl + "characters" + params)).then((http.Response r) {
       if (r.statusCode == 200) {
         setState(() {
