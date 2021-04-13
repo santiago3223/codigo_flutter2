@@ -1,9 +1,11 @@
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:marvelapi/utils.dart';
+import 'package:marvelapi/views/character_view.dart';
 import 'dart:convert';
 
-import 'models/character_data_wrapper.dart'; 
+import 'models/character_data_wrapper.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,47 +35,54 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String apiUrl ="https://gateway.marvel.com/v1/public/";
-  String ts = "1";
-  String publicKey = "7737f4a77e5ba5406c4c67dbbd3151e6";
-  String privateKey = "00763b7723ab2b6d06242cc5a3e2f8ecb42741ec";
   Hash hasher = md5;
-  CharacterDataWrapper data ;
+  CharacterDataWrapper data;
 
-
-  void loadCharacters(){
-    String key = hasher.convert(utf8.encode(ts+privateKey+publicKey)).toString();
+  void loadCharacters() {
+    String key =
+        hasher.convert(utf8.encode(ts + privateKey + publicKey)).toString();
     String params = "?ts=$ts&apikey=$publicKey&hash=$key";
-    http.get(Uri.parse(apiUrl+"characters"+params)).then((http.Response r )  {
-      if (r.statusCode==200){
+    http.get(Uri.parse(apiUrl + "characters" + params)).then((http.Response r) {
+      if (r.statusCode == 200) {
         setState(() {
-          data = CharacterDataWrapper.fromJson(json.decode(r.body));  
+          data = CharacterDataWrapper.fromJson(json.decode(r.body));
         });
       }
+      print(r.body);
     });
+  }
 
+  @override
+  void initState() {
+    loadCharacters();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    loadCharacters();
     return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              data.attributionText,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ), 
-    );
+        body: data == null
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                itemCount: data.data.results.length,
+                itemBuilder: (c, i) {
+                  return ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (c) =>
+                                  CharacterView(character: data.data.results[i])));
+                    },
+                    leading: Image.network(data.data.results[i].thumbnail.path +
+                        "/landscape_small.jpg"),
+                    title: Text(data.data.results[i].name),
+                  );
+                }));
   }
 }

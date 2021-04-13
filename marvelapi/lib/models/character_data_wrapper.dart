@@ -260,11 +260,11 @@ class Thumbnail {
     };
 }
 
-enum Extension { JPG, GIF }
+enum Extension { jpg, gif }
 
 final extensionValues = EnumValues({
-    "gif": Extension.GIF,
-    "jpg": Extension.JPG
+    "gif": Extension.gif,
+    "jpg": Extension.jpg
 });
 
 class Url {

@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.marvelapi">
    <application
+        android:usesCleartextTraffic="true"
         android:label="marvelapi"
         android:icon="@mipmap/ic_launcher">
         <activity
