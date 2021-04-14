@@ -37,11 +37,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Hash hasher = md5;
   CharacterDataWrapper data;
+  TextEditingController controller = TextEditingController();
 
-  void loadCharacters() {
+  void loadCharacters(String name) {
+    String searchParam = name == ""?"":"&nameStartsWith=$name";
+
     String key =
         hasher.convert(utf8.encode(ts + privateKey + publicKey)).toString();
-    String params = "?ts=$ts&apikey=$publicKey&hash=$key&limit=100";
+    String params =
+        "?ts=$ts&apikey=$publicKey&hash=$key&limit=100$searchParam";
     http.get(Uri.parse(apiUrl + "characters" + params)).then((http.Response r) {
       if (r.statusCode == 200) {
         setState(() {
@@ -54,35 +58,52 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    loadCharacters();
+    loadCharacters("");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: data == null
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemCount: data.data.results.length,
-                itemBuilder: (c, i) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (c) =>
-                                  CharacterView(character: data.data.results[i])));
-                    },
-                    leading: Image.network(data.data.results[i].thumbnail.path +
-                        "/landscape_small.jpg"),
-                    title: Text(data.data.results[i].name),
-                  );
-                }));
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: data == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                TextField(
+                  controller: controller,
+                  onSubmitted: (str){
+                    loadCharacters(str);
+                  },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: data.data.results.length,
+                      itemBuilder: (c, i) {
+                        return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (c) => CharacterView(
+                                        character: data.data.results[i])));
+                          },
+                          leading: Image.network(
+                              data.data.results[i].thumbnail.path +
+                                  "/landscape_small.jpg"),
+                          title: Text(data.data.results[i].name),
+                        );
+                      }),
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(child: Icon(Icons.search),onPressed: (){
+              loadCharacters(controller.text);
+            },),
+    );
   }
 }

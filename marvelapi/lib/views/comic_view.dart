@@ -41,29 +41,53 @@ class _ComicViewState extends State<ComicView> {
 
   @override
   Widget build(BuildContext context) {
-    return data == null? Scaffold(body: Center(child: CircularProgressIndicator(),),): Scaffold(
-      appBar: AppBar(
-        title: Text(data.data.results[0].title),
-      ),
-      body: SingleChildScrollView(
-              child: Column(
-          children: [
-            Text(
-              "NUMBER:" + data.data.results[0].issueNumber.toString(),
-              style: Theme.of(context).textTheme.headline6,
+    return data == null
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-            Image.network(
-                data.data.results[0].thumbnail.path + "/portrait_uncanny.jpg"),
-            Text("Writen by:", style: Theme.of(context).textTheme.headline6,),
-            Text(data.data.results[0].creators.items
-                .map((e) => e.name)
-                .toList()
-                .join(" - ")),
-            Text("Description:", style: Theme.of(context).textTheme.headline6,),    
-            Text(data.data.results[0].description ?? ""),
-          ],
-        ),
-      ),
-    );
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(data.data.results[0].title),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    "NUMBER:" + data.data.results[0].issueNumber.toString(),
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Image.network(data.data.results[0].thumbnail.path +
+                      "/portrait_uncanny.jpg"),
+                  Text(
+                    "Writen by:",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(data.data.results[0].creators.items
+                      .map((e) => e.name)
+                      .toList()
+                      .join(" - ")),
+                  Text(
+                    "Description:",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Text(data.data.results[0].description ?? ""),
+                  Text(
+                    "Characters:",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Container(
+                    height: 200,
+                    child: ListView.builder(
+                        itemCount: data.data.results[0].characters.items.length,
+                        itemBuilder: (c, i) => ListTile(
+                            title: Text(data
+                                .data.results[0].characters.items[i].name))),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }
