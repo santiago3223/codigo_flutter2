@@ -4,7 +4,6 @@ import 'package:marvelapi/views/comic_view.dart';
 
 class CharacterView extends StatelessWidget {
   final Character character;
-
   const CharacterView({Key key, this.character}) : super(key: key);
 
   @override

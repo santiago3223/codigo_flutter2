@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:marvelapi/models/character_data_wrapper.dart';
 import 'package:marvelapi/models/comic_data_wrapper.dart';
 import 'package:marvelapi/utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:marvelapi/views/character_view.dart';
 
 class ComicView extends StatefulWidget {
   final String url;
@@ -31,6 +33,18 @@ class _ComicViewState extends State<ComicView> {
       }
       print(r.body);
     });
+  }
+
+  Future loadCharacter(String uri) async {
+    String key =
+        hasher.convert(utf8.encode(ts + privateKey + publicKey)).toString();
+    String params = "?ts=$ts&apikey=$publicKey&hash=$key";
+    http.Response r = await http.get(Uri.parse(uri + params));
+    if (r.statusCode == 200) {
+      return CharacterDataWrapper.fromJson(json.decode(r.body)).data.results[0];
+    }
+    print(r.body);
+    return null;
   }
 
   @override
@@ -82,6 +96,17 @@ class _ComicViewState extends State<ComicView> {
                     child: ListView.builder(
                         itemCount: data.data.results[0].characters.items.length,
                         itemBuilder: (c, i) => ListTile(
+                            onTap: () {
+                              loadCharacter(data.data.results[0].characters
+                                      .items[i].resourceUri)
+                                  .then((value) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (c) =>
+                                            CharacterView(character: value)));
+                              });
+                            },
                             title: Text(data
                                 .data.results[0].characters.items[i].name))),
                   )
