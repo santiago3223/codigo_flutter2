@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'line_chart_sample_9.dart';
+import 'pie_chart_sample_1.dart';
 
 class Graficos extends StatefulWidget {
   @override
@@ -14,8 +15,8 @@ class _GraficosState extends State<Graficos> {
       appBar: AppBar(title: Text("Graficos"),),
       body: Container(
         margin: EdgeInsets.all(25),
-        height: 200,
-        child: LineChartSample9()),
+        height: 600,
+        child: PieChartSample1()),
     );
   }
 }
