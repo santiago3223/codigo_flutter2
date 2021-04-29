@@ -23,7 +23,7 @@ class CountDownTimer {
   }
 
   Stream<TimerModel> stream() async* {
-    yield* Stream.periodic(Duration(seconds: 1), (int a) {
+    yield* Stream.periodic(Duration(seconds: 1), (_) {
       if (_isActive) {
         _time = _time - Duration(seconds: 1);
         _percentaje = _time.inSeconds / _fulltime.inSeconds;

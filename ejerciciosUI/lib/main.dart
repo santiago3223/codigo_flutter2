@@ -1,168 +1,318 @@
+
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Ejercicio4(),
+      home: AuthThreePage()
+      
     );
   }
 }
 
-class Ejercicio4 extends StatelessWidget {
+class AuthThreePage extends StatefulWidget {
+  static final String path = "lib/src/pages/login/auth3.dart";
+
+  @override
+  _AuthThreePageState createState() => _AuthThreePageState();
+}
+
+class _AuthThreePageState extends State<AuthThreePage> {
+  
+  bool formVisible;
+  int _formsIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    formVisible = false;
+    _formsIndex = 1;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: IconButton(
-              icon: Icon(
-                Icons.category,
-                color: Colors.black,
-              ),
-              onPressed: () {}),
-          centerTitle: true,
-          title: Text(
-            "Categories",
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: [
-            IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.black,
-                ),
-                onPressed: () {})
-          ],
-          bottom: TabBar(
-            labelColor: Colors.pink,
-            indicatorColor: Colors.pink,
-            unselectedLabelColor: Colors.black,
-            tabs: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Para Ti"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Disenio"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Belleza"),
-              )
-            ],
-          ),
+    return Scaffold(
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/dl-flutter-ui-challenges.appspot.com/o/bike%2Fbike1.jpg?alt=media"),
+          fit: BoxFit.cover,
         ),
-        body: TabBarView(
-          children: [
-            Container(
-              color: Colors.grey.shade300,
-              child: ListView.builder(
-                  itemBuilder: (c, i) => Container(
-                        color: Colors.white,
-                        margin: EdgeInsets.all(16),
-                        child: Stack(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              color: Colors.pink.shade100,
+      ),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            color: Colors.black54,
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: kToolbarHeight + 40),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "Welcome",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30.0,
+                        ),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        "Welcome to this awesome login app. \n You are awesome",
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 18.0,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Row(
+                  children: <Widget>[
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: RaisedButton(
+                        color: Colors.red,
+                        textColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Text("Login"),
+                        onPressed: () {
+                          setState(() {
+                            formVisible = true;
+                            _formsIndex = 1;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: RaisedButton(
+                        color: Colors.grey.shade700,
+                        textColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Text("Signup"),
+                        onPressed: () {
+                          setState(() {
+                            formVisible = true;
+                            _formsIndex = 2;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                  ],
+                ),
+                const SizedBox(height: 40.0),
+                OutlineButton.icon(
+                  borderSide: BorderSide(color: Colors.red),
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  icon: Icon(FontAwesomeIcons.google),
+                  label: Text("Continue with Google"),
+                  onPressed: () {},
+                ),
+                const SizedBox(height: 20.0),
+              ],
+            ),
+          ),
+          AnimatedSwitcher(
+            duration: Duration(milliseconds: 200),
+            child: (!formVisible)
+                ? null
+                : Container(
+                    color: Colors.black54,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RaisedButton(
+                              textColor: _formsIndex == 1
+                                  ? Colors.white
+                                  : Colors.black,
+                              color:
+                                  _formsIndex == 1 ? Colors.red : Colors.white,
+                              child: Text("Login"),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              onPressed: () {
+                                setState(() {
+                                  _formsIndex = 1;
+                                });
+                              },
                             ),
-                            Container(
-                                margin: EdgeInsets.all(16),
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Image.network(
-                                        "https://upload.wikimedia.org/wikipedia/commons/3/35/Elvis_Presley_Jailhouse_Rock.jpg",
-                                        width: 75,
-                                        height: 100,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "How to seem like you always have your shot together.",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.circle,
-                                                  color: Colors.pink,
-                                                  size: 36,
-                                                ),
-                                                Text(
-                                                  "Jonhy Vino",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Text(
-                                                  "4 min",
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text("read")
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )),
+                            const SizedBox(width: 10.0),
+                            RaisedButton(
+                              textColor: _formsIndex == 2
+                                  ? Colors.white
+                                  : Colors.black,
+                              color:
+                                  _formsIndex == 2 ? Colors.red : Colors.white,
+                              child: Text("Signup"),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              onPressed: () {
+                                setState(() {
+                                  _formsIndex = 2;
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 10.0),
+                            IconButton(
+                              color: Colors.white,
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  formVisible = false;
+                                });
+                              },
+                            )
                           ],
                         ),
-                      )),
+                        Container(
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 300),
+                            child:
+                                _formsIndex == 1 ? LoginForm() : SignupForm(),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+          )
+        ],
+      ),
+    ));
+  }
+}
+
+class LoginForm extends StatelessWidget {
+  const LoginForm({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(16.0),
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              hintText: "Enter email",
+              border: OutlineInputBorder(),
             ),
-            Container(
-              child: Center(
-                child: Text("Tab1"),
-              ),
+          ),
+          const SizedBox(height: 10.0),
+          TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: "Enter password",
+              border: OutlineInputBorder(),
             ),
-            Container(
-              child: Center(
-                child: Text("Tab1"),
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 1,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.pink,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.folder), label: ""),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.favorite_border), label: ""),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: ""),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10.0),
+          RaisedButton(
+            color: Colors.red,
+            textColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Text("Login"),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SignupForm extends StatelessWidget {
+  const SignupForm({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: ListView(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(16.0),
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              hintText: "Enter email",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: "Enter password",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: "Confirm password",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 10.0),
+          RaisedButton(
+            color: Colors.red,
+            textColor: Colors.white,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Text("Signup"),
+            onPressed: () {},
+          ),
+        ],
       ),
     );
   }

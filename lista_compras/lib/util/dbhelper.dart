@@ -4,12 +4,12 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  final int version = 1;
+  final int version = 3;
   static final DbHelper _dbHelper = DbHelper._internal();
 
   DbHelper._internal();
 
-  factory DbHelper(){
+  factory DbHelper() {
     return _dbHelper;
   }
 
@@ -24,7 +24,11 @@ class DbHelper {
         database.execute(
             "CREATE TABLE items(id INTEGER PRIMARY KEY, idList INTEGER,  name TEXT, quantity TEXT, FOREIGN KEY(idList) REFERENCES lists(id) )");
         print("Creada base de datos y sus tablas");
-      }, version: version);
+      },
+      onUpgrade: (db, oldVersion, newVersion) {
+        print("nueva version");
+      }
+      , version: version);
     }
     return db;
   }
@@ -52,22 +56,26 @@ class DbHelper {
     return id;
   }
 
-  Future<List<ShoppingList>> getLists() async{
+  Future<List<ShoppingList>> getLists() async {
     List<Map<String, dynamic>> maps = await db.query("lists");
     return maps.map((e) => ShoppingList.fromMap(e)).toList();
-    
   }
 
-  Future<List<ListItem>> getItems(int idList) async{
-    List<Map<String, dynamic>> maps = await db.query("items", where: 'idList=?', whereArgs: [idList]);
+  Future<List<ListItem>> getItems(int idList) async {
+    List<Map<String, dynamic>> maps =
+        await db.query("items", where: 'idList=?', whereArgs: [idList]);
     return maps.map((e) => ListItem.fromMap(e)).toList();
-    
   }
 
-  Future<int> deleteList(ShoppingList list) async{
-    int result = await db.delete("items", where: "idList=?", whereArgs: [list.id]);
+  Future<int> deleteList(ShoppingList list) async {
+    int result =
+        await db.delete("items", where: "idList=?", whereArgs: [list.id]);
     result = await db.delete("lists", where: "id=?", whereArgs: [list.id]);
     return result;
   }
 
+  Future<int> deleteItem(ListItem item) async {
+    int result = await db.delete("items", where: "id=?", whereArgs: [item.id]);
+    return result;
+  }
 }
