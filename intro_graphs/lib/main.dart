@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intro_slider/intro_slider.dart';
+import 'package:intro_slider/slide_object.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,57 +16,59 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: IntroScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
+class IntroScreen extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  IntroScreenState createState() => IntroScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class IntroScreenState extends State<IntroScreen> {
+ List<Slide> slides = [];
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+ @override
+ void initState() {
+   super.initState();
 
-  @override
-  Widget build(BuildContext context) {
+   slides.add(
+     new Slide(
+       title: "ERASER",
+       description: "Allow miles wound place the leave had. To sitting subject no improve studied limited",
+       pathImage: "images/photo_eraser.png",
+       backgroundColor: Color(0xfff5a623),
+     ),
+   );
+   slides.add(
+     new Slide(
+       title: "PENCIL",
+       description: "Ye indulgence unreserved connection alteration appearance",
+       pathImage: "images/photo_pencil.png",
+       backgroundColor: Color(0xff203152),
+     ),
+   );
+   slides.add(
+     new Slide(
+       title: "RULER",
+       description:
+       "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
+       pathImage: "images/photo_ruler.png",
+       backgroundColor: Color(0xff9932CC),
+     ),
+   );
+ }
 
-    return Scaffold(
-      appBar: AppBar(
+ void onDonePress() {
+   // Do what you want
+ }
 
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
+ @override
+ Widget build(BuildContext context) {
+   return IntroSlider(
+     slides: this.slides,
+     onDonePress: this.onDonePress,
+   );
+ }
 }
