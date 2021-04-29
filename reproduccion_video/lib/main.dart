@@ -10,6 +10,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 void main() {
   runApp(
@@ -155,7 +156,7 @@ class _ButterFlyAssetVideoState extends State<_ButterFlyAssetVideo> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/Butterfly-209.mp4');
+    _controller = VideoPlayerController.asset('assets/bunny.mp4');
 
     _controller.addListener(() {
       setState(() {});
@@ -207,6 +208,13 @@ class _BumbleBeeRemoteVideo extends StatefulWidget {
 
 class _BumbleBeeRemoteVideoState extends State<_BumbleBeeRemoteVideo> {
   late VideoPlayerController _controller;
+  YoutubePlayerController _controllerYoutube = YoutubePlayerController(
+    initialVideoId: 'iLnmTe5Q2Qw',
+    flags: YoutubePlayerFlags(
+      autoPlay: true,
+      mute: true,
+    ),
+  );
 
   Future<ClosedCaptionFile> _loadCaptions() async {
     final String fileContents = await DefaultAssetBundle.of(context)
@@ -241,26 +249,34 @@ class _BumbleBeeRemoteVideoState extends State<_BumbleBeeRemoteVideo> {
         children: <Widget>[
           Container(padding: const EdgeInsets.only(top: 20.0)),
           const Text('With remote mp4'),
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: <Widget>[
-                  VideoPlayer(_controller),
-                  _ControlsOverlay(controller: _controller),
-                  VideoProgressIndicator(
-                    _controller,
-                    allowScrubbing: true,
-                    colors: VideoProgressColors(
-                        playedColor: Colors.green,
-                        backgroundColor: Colors.red,
-                        bufferedColor: Colors.purple),
+          Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: <Widget>[
+                      VideoPlayer(_controller),
+                      _ControlsOverlay(controller: _controller),
+                      VideoProgressIndicator(
+                        _controller,
+                        allowScrubbing: true,
+                        colors: VideoProgressColors(
+                            playedColor: Colors.green,
+                            backgroundColor: Colors.red,
+                            bufferedColor: Colors.purple),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              YoutubePlayer(
+                controller: _controllerYoutube,
+                showVideoProgressIndicator: true,
+              ),
+            ],
           ),
         ],
       ),
