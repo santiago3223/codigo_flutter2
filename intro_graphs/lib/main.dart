@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_graphs/graphs.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
 
@@ -77,8 +78,7 @@ class IntroScreenState extends State<IntroScreen> {
   }
 
   void onDonePress() {
-    // Back to the first tab
-    this.goToTab(0);
+    Navigator.push(context, MaterialPageRoute(builder: (c)=>Graficos()));
   }
 
   void onTabChangeCompleted(index) {

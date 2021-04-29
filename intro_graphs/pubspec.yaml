@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   intro_slider: ^2.4.1
+  fl_chart: ^0.35.0
 
 
   # The following adds the Cupertino Icons font to your application.
