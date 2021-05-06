@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           FirebaseAuth.instance
               .createUserWithEmailAndPassword(
-                  email: "asdfasdf", password: "asdfasdf")
+                  email: "asdfasdf@gmail.com", password: "12123451")
               .then((value) => print(value))
               .catchError((e) => print(e));
         },
