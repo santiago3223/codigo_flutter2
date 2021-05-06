@@ -33,12 +33,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String userMail = "";
 
   @override
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((User user) {
       if (user == null) {
         print("Cerro Sesion"); //derrepente un navigator a la pantalla de login
+        setState(() {
+          userMail = "";
+        });
       } else {
         print("Inicio Sesion"); //
       }
@@ -56,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              userMail,
             ),
             Text(
               '$_counter',
@@ -69,9 +73,15 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           FirebaseAuth.instance
               .createUserWithEmailAndPassword(
-                  email: "asdfasdf@gmail.com", password: "12123451")
-              .then((value) => print(value))
-              .catchError((e) => print(e));
+                  email: "santiago2@gmail.com", password: "12123451")
+              .then((user) {
+            print(user);
+            setState(() {
+              userMail = user.user.email;
+            });
+            print(user.user.email);
+            print(userMail);
+          }).catchError((e) => print(e));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
