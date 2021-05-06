@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String userMail = "";
+  TextEditingController controllerCorreo = TextEditingController();
+  TextEditingController controllerPwd = TextEditingController();
 
   @override
   void initState() {
@@ -62,29 +65,91 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               userMail,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            TextField(
+              controller: controllerCorreo,
+              decoration: InputDecoration(hintText: "correo"),
             ),
+            TextField(
+              controller: controllerPwd,
+              decoration: InputDecoration(hintText: "password"),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: controllerCorreo.text,
+                          password: controllerPwd.text)
+                      .then((user) {
+                    setState(() {
+                      userMail = user.user.email;
+                    });
+                  }).catchError((e) => print(e));
+                },
+                child: Text("Registrar")),
+            ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: controllerCorreo.text,
+                          password: controllerPwd.text)
+                      .then((user) {
+                    setState(() {
+                      userMail = user.user.email;
+                    });
+                  }).catchError((e) => print(e));
+                },
+                child: Text("Iniciar Sesion")),
+            ElevatedButton(
+                onPressed: () async {
+                  GoogleSignInAccount googleUser =
+                      await GoogleSignIn().signIn();
+                  GoogleSignInAuthentication googleAuth =
+                      await googleUser.authentication;
+
+                  var credential = GoogleAuthProvider.credential(
+                      accessToken: googleAuth.accessToken,
+                      idToken: googleAuth.idToken);
+
+                  FirebaseAuth.instance
+                      .signInWithCredential(credential)
+                      .then((user) {
+                    setState(() {
+                      userMail = user.user.email;
+                    });
+                  }).catchError((e) => print(e));
+                },
+                child: Text("Iniciar Sesion GOOGLE")),
+                ElevatedButton(
+                onPressed: () async {
+                  GoogleSignInAccount googleUser =
+                      await GoogleSignIn().signIn();
+                  GoogleSignInAuthentication googleAuth =
+                      await googleUser.authentication;
+
+                  var credential = GoogleAuthProvider.credential(
+                      accessToken: googleAuth.accessToken,
+                      idToken: googleAuth.idToken);
+
+                  FirebaseAuth.instance
+                      .signInWithCredential(credential)
+                      .then((user) {
+                    setState(() {
+                      userMail = user.user.email;
+                    });
+                  }).catchError((e) => print(e));
+                },
+                child: Text("Iniciar Sesion FACEBOOK")),
+            ElevatedButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut().then((value) {
+                    setState(() {
+                      userMail = "";
+                    });
+                  });
+                },
+                child: Text("Log out"))
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: "santiago2@gmail.com", password: "12123451")
-              .then((user) {
-            print(user);
-            setState(() {
-              userMail = user.user.email;
-            });
-            print(user.user.email);
-            print(userMail);
-          }).catchError((e) => print(e));
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
