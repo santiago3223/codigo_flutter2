@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 Future<void> main() async {
@@ -121,14 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("Iniciar Sesion GOOGLE")),
                 ElevatedButton(
                 onPressed: () async {
-                  GoogleSignInAccount googleUser =
-                      await GoogleSignIn().signIn();
-                  GoogleSignInAuthentication googleAuth =
-                      await googleUser.authentication;
-
-                  var credential = GoogleAuthProvider.credential(
-                      accessToken: googleAuth.accessToken,
-                      idToken: googleAuth.idToken);
+                  LoginResult loginResult  = await FacebookAuth.instance.login();
+                  
+                  var credential = FacebookAuthProvider.credential(loginResult.accessToken.token);
 
                   FirebaseAuth.instance
                       .signInWithCredential(credential)
