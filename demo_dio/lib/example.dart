@@ -8,7 +8,7 @@ abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
   @GET("/tasks")
-  Future<List<Task>> getTasks(@Path() int id );
+  Future<List<Task>> getTasks();
 }
 
 class Task {
@@ -17,5 +17,12 @@ class Task {
   String avatar;
   String createdAt;
   Task();
+
+  Task.fromJson(Map json){
+    id = json["id"];
+    name = json["name"];
+    avatar = json["avatar"];
+    createdAt = json["createdAt"];
+  }
 }
 

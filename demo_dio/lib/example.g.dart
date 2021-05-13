@@ -17,12 +17,11 @@ class _RestClient implements RestClient {
   String baseUrl;
 
   @override
-  Future<List<String>> getTasks(id) async {
-    ArgumentError.checkNotNull(id, 'id');
+  Future<List<Task>> getTasks() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.request<List<dynamic>>('/tasks/',
+    final _result = await _dio.request<List<dynamic>>('/tasks',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -30,7 +29,9 @@ class _RestClient implements RestClient {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = _result.data.cast<String>();
+    var value = _result.data
+        .map((dynamic i) => Task.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 }
