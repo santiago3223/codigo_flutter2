@@ -101,6 +101,21 @@ class _MyHomePageState extends State<MyHomePage> {
               request: AdRequest(),
               adLoadCallback: InterstitialAdLoadCallback(
                 onAdLoaded: (InterstitialAd ad) {
+                  ad.fullScreenContentCallback = FullScreenContentCallback(
+                    onAdShowedFullScreenContent: (InterstitialAd ad) =>
+                        print('$ad onAdShowedFullScreenContent.'),
+                    onAdDismissedFullScreenContent: (InterstitialAd ad) {
+                      print('$ad onAdDismissedFullScreenContent.');
+                      ad.dispose();
+                    },
+                    onAdFailedToShowFullScreenContent:
+                        (InterstitialAd ad, AdError error) {
+                      print('$ad onAdFailedToShowFullScreenContent: $error');
+                      ad.dispose();
+                    },
+                    onAdImpression: (InterstitialAd ad) =>
+                        print('$ad impression occurred.'),
+                  );
                   ad.show();
                 },
                 onAdFailedToLoad: (LoadAdError error) {
