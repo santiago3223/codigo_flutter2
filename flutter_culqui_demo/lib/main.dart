@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_culqi/flutter_culqi.dart';
 import 'package:http/http.dart' as http;
@@ -71,17 +73,19 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () async {
           var result = await tokenizer.getToken(publicKey: _publicKey);
           if (result is CulqiToken) {
-            print(result.token);
-            var url = Uri.parse('https://api.culqi.com/v2/charges');
-            var response = await http.post(url, headers: {
-              "Accept": "application/json",
-              "authorization": "pk_test_vzMuTHoueOMlgUPj"
-            }, body: {
+            var datos = {
               "amount": "1000",
               "currency_code": "PEN",
               "email": "TEST@CULQI",
-              "source_id": "tkn_test_vzMuTHoueOMlgUPj"
-            });
+              "source_id": "${result.token}"
+            };
+            var body = json.encode(datos);
+            var url = Uri.parse('https://api.culqi.com/v2/charges');
+            var response = await http.post(url, headers: {
+              "Accept": "application/json",
+              "content-type": "application/json",
+              "authorization": "Bearer sk_test_X4B0eTfS39dgvkPQ"
+            }, body: body );
             print(response.body);
           } else if (result is CulqiError) {
             print(result);
